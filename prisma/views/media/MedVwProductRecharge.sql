@@ -1,0 +1,59 @@
+SELECT
+  mmpr.id,
+  mmpr."medMediaProductId",
+  mmpr."releaseDate",
+  mmpr.type,
+  mmpr.rsn,
+  mmpr."isProcessed",
+  mmpr."rechargeToken",
+  mmpr."rechargeDate",
+  mmpr."isRecharged",
+  mmpr."blameUser",
+  mmpr."createdAt",
+  mmpr."updatedAt",
+  mmpr."comRechargeOrderDetailId",
+  mmpr."isActive",
+  mmpr."isTransfer",
+  mmpr."medMediaProductRechargeTransferFromId",
+  mmpr."medMediaTransferId",
+  mmpr."samCsn",
+  mmpr.signature,
+  mmpr.value,
+  mmpr."usrOrganizationId",
+  mmpr.csn,
+  mmpr."externalId",
+  mmpr."medTransitProductCode",
+  mmpr."toIssuerCode",
+  mmpr."toSysCode",
+  mmpr."creditSerie",
+  mmpr."dvcThingThingName",
+  mmpr."toTerminalCode",
+  mmpr."toTransportOperatorId",
+  mmpr."statusDate",
+  mmpr."liveDate",
+  mmpr."hotlistCompleteId",
+  mmpr."confirmationSequence",
+  mmpr."rechargeReason",
+  mmpr."wasMigrated",
+  mmpr.pursebalancea,
+  mmpr.pursebalanceb,
+  mmpr.pursedatea,
+  mmpr.pursedateb,
+  mmpr.purseseriea,
+  mmpr.purseserieb,
+  mmpr.tsn,
+  mmp."medMediaId",
+  mmp."medTransitProductId",
+  mtp.description,
+  mm."formatedLogical"
+FROM
+  (
+    (
+      (
+        media."MedMediaProductRecharge" mmpr
+        LEFT JOIN media."MedMediaProduct" mmp ON ((mmpr."medMediaProductId" = mmp.id))
+      )
+      LEFT JOIN media."MedTransitProduct" mtp ON ((mmp."medTransitProductId" = mtp.id))
+    )
+    LEFT JOIN media."MedMedia" mm ON ((mmp."medMediaId" = mm.id))
+  );
