@@ -3,12 +3,14 @@ import { BuyerService } from "./services/buyer.service";
 import { RegisterService } from "./services/register.service";
 import { BalanceService } from "./services/balance.service";
 import { UserService } from "./services/user.service";
+import { CardService } from "./services/card.service";
 
 const router = Router();
 const buyerService = new BuyerService();
 const registerService = new RegisterService();
 const balanceService = new BalanceService();
 const userService = new UserService();
+const cardService = new CardService();
 
 // Endpoint para testar buyerRegister
 router.post("/test/buyerRegister", async (req, res) => {
@@ -84,6 +86,36 @@ router.post("/test/userRecharge", async (req, res) => {
 router.post("/test/userRechargeFetch", async (req, res) => {
   try {
     const result = await userService.userRechargeFetch(req.body);
+    res.json(result);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint para testar cardReplacement
+router.post("/test/cardReplacement", async (req, res) => {// TODO: verificar erro 400 msg: Erro de processamento
+  try {
+    const result = await cardService.cardReplacement(req.body);
+    res.json(result);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint para testar cardReplacementFetch
+router.post("/test/cardReplacementFetch", async (req, res) => {// TODO: verificar erro 400 msg: Erro de processamento
+  try {
+    const result = await cardService.cardReplacementFetch(req.body);
+    res.json(result);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint para testar cardUnlock
+router.post("/test/cardUnlock", async (req, res) => {
+  try {
+    const result = await cardService.cardUnlock(req.body);
     res.json(result);
   } catch (error: any) {
     res.status(500).json({ error: error.message });

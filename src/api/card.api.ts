@@ -33,3 +33,18 @@ export async function cartaoSegundaViaConsulta(payload: CardReplacementFetchPayl
     throw new Error(error.response?.data?.message || "Falha ao consultar segunda-via de cartão");
   }
 }
+
+export async function cartaoDesbloaquear(payload: CardUnlockPayload, authToken: string): Promise<any> {
+  try {
+    const body = encodeJWT(payload);
+    const response = await axios.post(`${BILLING_URL}/vt-gateway/desbloquear/midias`, body, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: authToken,
+      },
+    });
+    return response;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Falha ao desbloquear cartões");
+  }
+}

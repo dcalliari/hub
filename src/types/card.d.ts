@@ -26,3 +26,14 @@ type ListaSegundaVia = {
 interface CardReplacementFetchPayload {
   uid: string;
 }
+
+/**
+ * Payload que representa as informações de desbloqueio de cartões.
+ *
+ * @property documentoComprador - CNPJ ou CPF do comprador.
+ * @property cpfs - Lista de CPFs a serem desbloqueados.
+ */
+interface CardUnlockPayload {
+  documentoComprador: string;
+  cpfs: string[];
+}

@@ -1,6 +1,6 @@
 import { AuthService } from "./auth.service";
-import { cartaoSegundaVia, cartaoSegundaViaConsulta } from "../api/card.api";
-import { cardReplacementPayloadSchema, cardReplacementFetchPayloadSchema } from "../validations/card.schema";
+import { cartaoDesbloaquear, cartaoSegundaVia, cartaoSegundaViaConsulta } from "../api/card.api";
+import { cardReplacementPayloadSchema, cardReplacementFetchPayloadSchema, cardUnlockPayloadSchema } from "../validations/card.schema";
 
 export class CardService {
   private auth: AuthService;
@@ -50,4 +50,25 @@ export class CardService {
       console.error("Erro ao consultar segunda-via de cartão:", error.response?.data || error.message);
     }
   }
+
+    public async cardUnlock(payload: CardUnlockPayload): Promise<any> {
+      const authToken = await this.auth.ensureAuthenticated();
+      if (!authToken) {
+        console.error("Falha na autenticação. Não é possível desbloquear cartões.");
+        return;
+      }
+  
+      const parsed = cardUnlockPayloadSchema.safeParse(payload);
+      if (!parsed.success) {
+        throw new Error(`Payload de desbloqueio de cartões inválido: ${parsed.error.format()}`);
+      }
+  
+      try {
+        const response = await cartaoDesbloaquear(payload, authToken);
+        console.log("Resposta da API desbloquear/midias:", response.data);
+        return response.data;
+      } catch (error: any) {
+        console.error("Erro ao desbloquear cartões:", error.response?.data || error.message);
+      }
+    }
 }
