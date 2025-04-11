@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from "fs";
-import { envSchema } from "../validations/env.schema";
+import { envSchema } from "../config/env.schema";
 import { parse as dotenvParse } from "dotenv";
 import path from "path";
 
