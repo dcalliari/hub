@@ -2,7 +2,7 @@ import { AuthService } from "./auth.service";
 import { cartaoSegundaVia, cartaoSegundaViaConsulta } from "../api/card.api";
 import { cardReplacementPayloadSchema, cardReplacementFetchPayloadSchema } from "../validations/card.schema";
 
-export class UserService {
+export class CardService {
   private auth: AuthService;
 
   constructor() {
