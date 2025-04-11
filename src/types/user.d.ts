@@ -28,5 +28,5 @@ type Recarga = {
  * @property uid - Identificador único de recarga.
  */
 interface UserRechargeFetchPayload {
-  uid: string;
+  uuid: string;
 }

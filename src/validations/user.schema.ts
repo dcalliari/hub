@@ -13,5 +13,5 @@ export const userRechargePayloadSchema = z.object({
 });
 
 export const userRechargeFetchPayloadSchema = z.object({
-  uid: z.string().min(1, "UID deve ser um identificador válido"),
+  uuid: z.string().min(1, "UID deve ser um identificador válido"),
 });
