@@ -2,11 +2,13 @@ import { Router } from "express";
 import { BuyerService } from "./services/buyer.service";
 import { RegisterService } from "./services/register.service";
 import { BalanceService } from "./services/balance.service";
+import { UserService } from "./services/user.service";
 
 const router = Router();
 const buyerService = new BuyerService();
 const registerService = new RegisterService();
 const balanceService = new BalanceService();
+const userService = new UserService();
 
 // Endpoint para testar buyerRegister
 router.post("/test/buyerRegister", async (req, res) => {
@@ -62,6 +64,16 @@ router.post("/test/registerFetch", async (req, res) => {
 router.post("/test/balanceFetch", async (req, res) => {
   try {
     const result = await balanceService.balanceFetch(req.body);
+    res.json(result);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint para testar userRecharge
+router.post("/test/userRecharge", async (req, res) => {
+  try {
+    const result = await userService.userRecharge(req.body);
     res.json(result);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
