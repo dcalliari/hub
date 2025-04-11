@@ -4,12 +4,14 @@ import path from "path";
 import cors from "cors";
 
 import env from "./env";
+import testRoutes from "./test.routes";
 
 class Server {
   private server = express();
 
   constructor() {
     this.configureServer();
+    this.setupRoutes();
   }
 
   async configureServer() {
@@ -34,6 +36,18 @@ class Server {
       console.log(`stage: ${env.STAGE}`);
       console.log(`Servidor na porta: ${env.PORT}`);
     });
+  }
+
+  setupRoutes() {
+    if (env.SERVER_ENVIRONMENT === "LocalMachine" || env.STAGE === "dev") {
+      console.log("Configuring routes for test environment...");
+      this.server.use(testRoutes);
+    } else {
+      console.log("Routes are not enabled in this environment.");
+      this.server.use((req, res) => {
+        res.status(404).json({ message: "Routes are not enabled in this environment." });
+      });
+    }
   }
 }
 
