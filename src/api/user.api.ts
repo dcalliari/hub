@@ -15,7 +15,7 @@ export async function usuarioRecarga(payload: UserRechargePayload, authToken: st
     });
     return response;
   } catch (error: any) {
-    throw new Error(error.response?.data?.message || "Falha ao consultar saldo");
+    throw new Error(error.response?.data?.message || "Falha ao solicitar recarga de usuário");
   }
 }
 
@@ -30,6 +30,6 @@ export async function usuarioRecargaConsulta(payload: UserRechargeFetchPayload, 
     });
     return response;
   } catch (error: any) {
-    throw new Error(error.response?.data?.message || "Falha ao consultar saldo");
+    throw new Error(error.response?.data?.message || "Falha ao consultar recarga de usuário");
   }
 }
