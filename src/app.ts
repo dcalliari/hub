@@ -1,8 +1,6 @@
-import "./config/Env";
+import "./config/env.config";
 import Server from "./server";
 
-(
-  async function main()  {
-    new Server();
-  }
-)()
+(async function main() {
+  new Server();
+})();

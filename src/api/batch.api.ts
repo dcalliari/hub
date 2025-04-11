@@ -1,7 +1,7 @@
 import axios from "axios";
-import Env from "../Env";
+import env from "../env";
 
-const BASE_URL = Env.BASE_URL!;
+const BASE_URL = env.BASE_URL!;
 
 export async function cadastroLote(data: any, authToken: string): Promise<any> {
   try {

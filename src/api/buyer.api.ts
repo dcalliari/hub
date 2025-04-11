@@ -1,8 +1,8 @@
 import axios from "axios";
-import { encodeJWT } from "../utils/jwtUtils";
-import Env from "../Env";
+import { encodeJWT } from "../utils/jwt.utils";
+import env from "../env";
 
-const BASE_URL = Env.BASE_URL!;
+const BASE_URL = env.BASE_URL!;
 
 export async function compradorCadastro(payload: CompradorCadastroPayload, authToken: string): Promise<any> {
   try {
@@ -19,7 +19,7 @@ export async function compradorCadastro(payload: CompradorCadastroPayload, authT
   }
 }
 
-export async function compradorConsulta(payload: any, authToken: string): Promise<any> {
+export async function compradorConsulta(payload: CompradorConsultaPayload, authToken: string): Promise<any> {
   try {
     const body = encodeJWT(payload);
     const response = await axios.post(`${BASE_URL}/vt-gateway/comprador/consulta`, body, {

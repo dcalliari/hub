@@ -1,6 +1,6 @@
-import { AuthService } from "./authService";
-import { gerarJWT } from "../utils/jwtUtils";
-import { cadastroLote, cadastroLoteConsulta } from "../api/batchApi";
+import { AuthService } from "./auth.service";
+import { encodeJWT } from "../utils/jwt.utils";
+import { cadastroLote, cadastroLoteConsulta } from "../api/batch.api";
 
 export class BatchService {
   private auth: AuthService;
@@ -44,7 +44,7 @@ export class BatchService {
       return;
     }
 
-    const body = gerarJWT(payload);
+    const body = encodeJWT(payload);
 
     try {
       const response = await cadastroLote(body, authToken);
@@ -52,10 +52,7 @@ export class BatchService {
       console.log("Resposta da API:", response.data);
       return response.data;
     } catch (error: any) {
-      console.error(
-        "Erro ao cadastrar lote:",
-        error.response?.data || error.message
-      );
+      console.error("Erro ao cadastrar lote:", error.response?.data || error.message);
     }
   }
 
@@ -75,7 +72,7 @@ export class BatchService {
       return;
     }
 
-    const body = gerarJWT(payload);
+    const body = encodeJWT(payload);
 
     try {
       const response = await cadastroLoteConsulta(body, authToken);
@@ -83,10 +80,7 @@ export class BatchService {
       console.log("Resposta da API:", response.data);
       return response.data;
     } catch (error: any) {
-      console.error(
-        "Erro ao consultar lote:",
-        error.response?.data || error.message
-      );
+      console.error("Erro ao consultar lote:", error.response?.data || error.message);
     }
   }
 }

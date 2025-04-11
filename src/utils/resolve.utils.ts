@@ -12,18 +12,14 @@ type Resolve<T> =
 
 export function resolve<T>(promise: Promise<T>): Promise<Resolve<T>>;
 export function resolve<T>(func: () => T): Resolve<T>;
-export function resolve<T>(
-  promiseOrFunc: Promise<T> | (() => T)
-): Promise<Resolve<T>> | Resolve<T> {
+export function resolve<T>(promiseOrFunc: Promise<T> | (() => T)): Promise<Resolve<T>> | Resolve<T> {
   if (promiseOrFunc instanceof Promise) {
     return resolveAsync(promiseOrFunc);
   }
   return resolveSync(promiseOrFunc);
 }
 
-export async function resolveAsync<T>(
-  promise: Promise<T>
-): Promise<Resolve<T>> {
+export async function resolveAsync<T>(promise: Promise<T>): Promise<Resolve<T>> {
   try {
     const data = await promise;
     return { data, success: true };

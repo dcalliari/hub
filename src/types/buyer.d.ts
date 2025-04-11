@@ -14,3 +14,12 @@ interface CompradorCadastroPayload {
   email: string;
   telefone: string;
 }
+
+/**
+ * Payload que representa as informações de consulta do comprador.
+ *
+ * @property documentoComprador - CNPJ ou CPF do comprador.
+ */
+interface CompradorConsultaPayload {
+  documentoComprador: string;
+}

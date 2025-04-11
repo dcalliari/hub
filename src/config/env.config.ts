@@ -1,6 +1,6 @@
-import { EnvSchema } from "./env-schema";
+import { envSchema } from "../validations/env.schema";
 
-const env = {
+const environment = {
   ...process.env,
   DATABASE_URL: process.env.DATABASE_URL,
   SERVER_ENVIRONMENT: process.env.SERVER_ENVIRONMENT || process.env.ENVIRONMENT,
@@ -12,7 +12,7 @@ const env = {
 };
 
 // Validate environment variables against schema
-const Env = EnvSchema.parse(env);
-console.log('Environment variables are valid!');
+const env = envSchema.parse(environment);
+console.log("Environment variables are valid!");
 
-export default Env;
+export default env;

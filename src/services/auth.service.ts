@@ -1,10 +1,10 @@
-import { autenticacao } from "../api/authApi";
+import { autenticacao } from "../api/auth.api";
 import { jwtDecode } from "jwt-decode";
-import Env from "../Env";
+import env from "../env";
 
 export class AuthService {
-  private static USER = Env.USER!;
-  private static PASSWORD = Env.PASSWORD!;
+  private static USER = env.USER!;
+  private static PASSWORD = env.PASSWORD!;
   private authToken: string | null = null;
 
   private isTokenExpired(token: string): boolean {
@@ -15,17 +15,11 @@ export class AuthService {
 
   public async authenticate(): Promise<string | null> {
     try {
-      const response = await autenticacao(
-        AuthService.USER,
-        AuthService.PASSWORD
-      );
+      const response = await autenticacao(AuthService.USER, AuthService.PASSWORD);
       this.authToken = response.token;
       return this.authToken;
     } catch (error: any) {
-      console.error(
-        "Erro na autenticação:",
-        error.response?.data || error.message
-      );
+      console.error("Erro na autenticação:", error.response?.data || error.message);
       this.authToken = null;
       return null;
     }
