@@ -17,7 +17,7 @@ export class BuyerService {
     return this.auth.getAuthToken();
   }
 
-  public async registerBuyer(payload: CompradorCadastroPayload): Promise<any> {
+  public async registerBuyer(payload: RegisterBuyerPayload): Promise<any> {
     const authToken = await this.ensureAuthenticated();
     if (!authToken) {
       console.error("Falha na autenticação. Não é possível cadastrar o comprador.");
@@ -31,14 +31,14 @@ export class BuyerService {
 
     try {
       const response = await compradorCadastro(payload, authToken);
-      console.log("Resposta da API:", response.data);
+      console.log("Resposta da API comprador/cadastro:", response.data);
       return response.data;
     } catch (error: any) {
       console.error("Erro ao cadastrar comprador:", error.response?.data || error.message);
     }
   }
 
-  public async fetchBuyer(payload: CompradorConsultaPayload): Promise<any> {
+  public async fetchBuyer(payload: FetchBuyerPayload): Promise<any> {
     const authToken = await this.ensureAuthenticated();
     if (!authToken) {
       console.error("Falha na autenticação. Não é possível consultar o comprador.");
@@ -52,7 +52,7 @@ export class BuyerService {
 
     try {
       const response = await compradorConsulta(payload, authToken);
-      console.log("Resposta da API:", response.data);
+      console.log("Resposta da API comprador/consulta:", response.data);
       return response.data;
     } catch (error: any) {
       console.error("Erro ao consultar comprador:", error.response?.data || error.message);

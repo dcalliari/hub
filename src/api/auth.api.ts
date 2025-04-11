@@ -11,7 +11,6 @@ export async function autenticacao(usuario: string, senha: string): Promise<Auth
     });
     return response.data;
   } catch (error: any) {
-    console.error("Erro na autenticação:", error.response?.data || error.message);
-    throw new Error("Falha na autenticação");
+    throw new Error(error.response?.data?.message || "Falha na autenticação");
   }
 }

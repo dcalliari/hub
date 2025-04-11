@@ -7,7 +7,7 @@
  * @property email - O endereço de e-mail do comprador.
  * @property telefone - O número de telefone do comprador.
  */
-interface CompradorCadastroPayload {
+interface RegisterBuyerPayload {
   documentoComprador: string;
   nome: string;
   nomeFantasia?: string;
@@ -20,6 +20,6 @@ interface CompradorCadastroPayload {
  *
  * @property documentoComprador - CNPJ ou CPF do comprador.
  */
-interface CompradorConsultaPayload {
+interface FetchBuyerPayload {
   documentoComprador: string;
 }
