@@ -9,10 +9,11 @@ export async function compradorCadastro(payload: RegisterBuyerPayload, authToken
     const body = encodeJWT(payload);
     const response = await axios.post(`${BILLING_URL}/vt-gateway/comprador/cadastro`, body, {
       headers: {
-        Authorization: `Bearer ${authToken}`,
+        "Content-Type": "application/json",
+        Authorization: authToken,
       },
     });
-    return response.data;
+    return response;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Falha ao cadastrar comprador");
   }
@@ -23,10 +24,11 @@ export async function compradorConsulta(payload: FetchBuyerPayload, authToken: s
     const body = encodeJWT(payload);
     const response = await axios.post(`${BILLING_URL}/vt-gateway/comprador/consulta`, body, {
       headers: {
-        Authorization: `Bearer ${authToken}`,
+        "Content-Type": "application/json",
+        Authorization: authToken,
       },
     });
-    return response.data;
+    return response;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Falha ao consultar comprador");
   }

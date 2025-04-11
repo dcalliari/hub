@@ -9,11 +9,11 @@ export async function cadastroLote(payload: RegisterBatchPayload, authToken: str
     const body = encodeJWT(payload);
     const response = await axios.post(`${BILLING_URL}/vt-gateway/cadastro/lote`, body, {
       headers: {
-        Authorization: `Bearer ${authToken}`,
         "Content-Type": "application/json",
+        Authorization: authToken,
       },
     });
-    return response.data;
+    return response;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Falha ao cadastrar lote");
   }
@@ -24,11 +24,11 @@ export async function cadastroLoteConsulta(payload: FetchBatchPayload, authToken
     const body = encodeJWT(payload);
     const response = await axios.post(`${BILLING_URL}/vt-gateway/cadastro/lote/consulta`, body, {
       headers: {
-        Authorization: `Bearer ${authToken}`,
         "Content-Type": "application/json",
+        Authorization: authToken,
       },
     });
-    return response.data;
+    return response;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Falha ao consultar lote");
   }
@@ -39,11 +39,11 @@ export async function cadastroConsulta(payload: registerFetchPayload, authToken:
     const body = encodeJWT(payload);
     const response = await axios.post(`${BILLING_URL}/vt-gateway/cadastro/consulta`, body, {
       headers: {
-        Authorization: `Bearer ${authToken}`,
         "Content-Type": "application/json",
+        Authorization: authToken,
       },
     });
-    return response.data;
+    return response;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Falha ao consultar cadastro");
   }
