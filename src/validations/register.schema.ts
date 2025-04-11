@@ -25,7 +25,7 @@ export const registerBatchPayloadSchema = z.object({
   ),
 });
 
-export const fetchBatchPayloadSchema = z.object({
+export const registerFetchBatchPayloadSchema = z.object({
   uid: z.string().min(1, "UID deve ser um identificador válido"),
 });
 

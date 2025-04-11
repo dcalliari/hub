@@ -1,6 +1,6 @@
 import { AuthService } from "./auth.service";
 import { compradorCadastro, compradorConsulta } from "../api/buyer.api";
-import { fetchBuyerPayloadSchema, registerBuyerPayloadSchema } from "../validations/buyer.schema";
+import { buyerFetchPayloadSchema, buyerRegisterPayloadSchema } from "../validations/buyer.schema";
 
 export class BuyerService {
   private auth: AuthService;
@@ -9,14 +9,14 @@ export class BuyerService {
     this.auth = new AuthService();
   }
 
-  public async registerBuyer(payload: RegisterBuyerPayload): Promise<any> {
+  public async buyerRegister(payload: BuyerRegisterPayload): Promise<any> {
     const authToken = await this.auth.ensureAuthenticated();
     if (!authToken) {
       console.error("Falha na autenticação. Não é possível cadastrar o comprador.");
       return;
     }
 
-    const parsed = registerBuyerPayloadSchema.safeParse(payload);
+    const parsed = buyerRegisterPayloadSchema.safeParse(payload);
     if (!parsed.success) {
       throw new Error(`Payload de cadastro de comprador inválido: ${parsed.error.format()}`);
     }
@@ -30,14 +30,14 @@ export class BuyerService {
     }
   }
 
-  public async fetchBuyer(payload: FetchBuyerPayload): Promise<any> {
+  public async buyerFetch(payload: BuyerFetchPayload): Promise<any> {
     const authToken = await this.auth.ensureAuthenticated();
     if (!authToken) {
       console.error("Falha na autenticação. Não é possível consultar o comprador.");
       return;
     }
 
-    const parsed = fetchBuyerPayloadSchema.safeParse(payload);
+    const parsed = buyerFetchPayloadSchema.safeParse(payload);
     if (!parsed.success) {
       throw new Error(`Payload de consulta de comprador inválido: ${parsed.error.format()}`);
     }

@@ -54,7 +54,7 @@ type Colaborador = {
  *
  * @property uid - Identificador único do lote a ser consultado.
  */
-interface FetchBatchPayload {
+interface RegisterFetchBatchPayload {
   uid: string;
 }
 

@@ -1,6 +1,6 @@
 import { AuthService } from "./auth.service";
 import { cadastroConsulta, cadastroLote, cadastroLoteConsulta } from "../api/register.api";
-import { fetchBatchPayloadSchema, registerBatchPayloadSchema, registerFetchPayloadSchema } from "../validations/register.schema";
+import { registerFetchBatchPayloadSchema, registerBatchPayloadSchema, registerFetchPayloadSchema } from "../validations/register.schema";
 
 export class RegisterService {
   private auth: AuthService;
@@ -30,14 +30,14 @@ export class RegisterService {
     }
   }
 
-  public async fetchBatch(payload: FetchBatchPayload): Promise<any> {
+  public async registerFetchBatch(payload: RegisterFetchBatchPayload): Promise<any> {
     const authToken = await this.auth.ensureAuthenticated();
     if (!authToken) {
       console.error("Falha na autenticação. Não é possível consultar o lote.");
       return;
     }
 
-    const parsed = fetchBatchPayloadSchema.safeParse(payload);
+    const parsed = registerFetchBatchPayloadSchema.safeParse(payload);
     if (!parsed.success) {
       throw new Error(`Payload de consulta de lote inválido: ${parsed.error.format()}`);
     }
