@@ -32,4 +32,12 @@ export class AuthService {
     }
     return this.authToken;
   }
+
+  public async ensureAuthenticated(): Promise<string | null> {
+    if (!this.getAuthToken()) {
+      console.log("Token não encontrado. Autenticando...");
+      await this.authenticate();
+    }
+    return this.getAuthToken();
+  }
 }

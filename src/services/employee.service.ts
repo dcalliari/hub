@@ -9,16 +9,8 @@ export class EmployeeService {
     this.auth = new AuthService();
   }
 
-  private async ensureAuthenticated(): Promise<string | null> {
-    if (!this.auth.getAuthToken()) {
-      console.log("Token não encontrado. Autenticando...");
-      await this.auth.authenticate();
-    }
-    return this.auth.getAuthToken();
-  }
-
   public async registerBatch(payload: RegisterBatchPayload): Promise<any> {
-    const authToken = await this.ensureAuthenticated();
+    const authToken = await this.auth.ensureAuthenticated();
     if (!authToken) {
       console.error("Falha na autenticação. Não é possível cadastrar o lote.");
       return;
@@ -39,7 +31,7 @@ export class EmployeeService {
   }
 
   public async fetchBatch(payload: FetchBatchPayload): Promise<any> {
-    const authToken = await this.ensureAuthenticated();
+    const authToken = await this.auth.ensureAuthenticated();
     if (!authToken) {
       console.error("Falha na autenticação. Não é possível consultar o lote.");
       return;

@@ -9,16 +9,8 @@ export class BuyerService {
     this.auth = new AuthService();
   }
 
-  private async ensureAuthenticated(): Promise<string | null> {
-    if (!this.auth.getAuthToken()) {
-      console.log("Token não encontrado. Autenticando...");
-      await this.auth.authenticate();
-    }
-    return this.auth.getAuthToken();
-  }
-
   public async registerBuyer(payload: RegisterBuyerPayload): Promise<any> {
-    const authToken = await this.ensureAuthenticated();
+    const authToken = await this.auth.ensureAuthenticated();
     if (!authToken) {
       console.error("Falha na autenticação. Não é possível cadastrar o comprador.");
       return;
@@ -39,7 +31,7 @@ export class BuyerService {
   }
 
   public async fetchBuyer(payload: FetchBuyerPayload): Promise<any> {
-    const authToken = await this.ensureAuthenticated();
+    const authToken = await this.auth.ensureAuthenticated();
     if (!authToken) {
       console.error("Falha na autenticação. Não é possível consultar o comprador.");
       return;
