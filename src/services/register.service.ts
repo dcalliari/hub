@@ -1,8 +1,8 @@
 import { AuthService } from "./auth.service";
-import { cadastroConsulta, cadastroLote, cadastroLoteConsulta } from "../api/employee.api";
-import { fetchBatchPayloadSchema, registerBatchPayloadSchema, registerFetchPayloadSchema } from "../validations/employee.schema";
+import { cadastroConsulta, cadastroLote, cadastroLoteConsulta } from "../api/register.api";
+import { fetchBatchPayloadSchema, registerBatchPayloadSchema, registerFetchPayloadSchema } from "../validations/register.schema";
 
-export class EmployeeService {
+export class RegisterService {
   private auth: AuthService;
 
   constructor() {
@@ -51,7 +51,7 @@ export class EmployeeService {
     }
   }
   
-  public async registerFetch(payload: registerFetchPayload): Promise<any> {
+  public async registerFetch(payload: RegisterFetchPayload): Promise<any> {
     const authToken = await this.auth.ensureAuthenticated();
     if (!authToken) {
       console.error("Falha na autenticação. Não é possível consultar o cadastro.");

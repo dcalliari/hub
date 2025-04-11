@@ -64,7 +64,7 @@ interface FetchBatchPayload {
  * @property documentoComprador - CNPJ ou CPF do comprador.
  * @property cpfs - Lista de CPFs a serem consultados.
  */
-interface registerFetchPayload {
+interface RegisterFetchPayload {
   documentoComprador: string;
   cpfs: string[];
 }

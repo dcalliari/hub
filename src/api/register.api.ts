@@ -34,7 +34,7 @@ export async function cadastroLoteConsulta(payload: FetchBatchPayload, authToken
   }
 }
 
-export async function cadastroConsulta(payload: registerFetchPayload, authToken: string): Promise<any> {
+export async function cadastroConsulta(payload: RegisterFetchPayload, authToken: string): Promise<any> {
   try {
     const body = encodeJWT(payload);
     const response = await axios.post(`${BILLING_URL}/vt-gateway/cadastro/consulta`, body, {
