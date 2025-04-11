@@ -4,7 +4,7 @@ import env from "../env";
 
 const BASE_URL = env.BASE_URL!;
 
-export async function cadastroLote(payload: any, authToken: string): Promise<any> {
+export async function cadastroLote(payload: RegisterBatchPayload, authToken: string): Promise<any> {
   try {
     const body = encodeJWT(payload);
     const response = await axios.post(`${BASE_URL}/vt-gateway/cadastro/lote`, body, {
@@ -19,7 +19,7 @@ export async function cadastroLote(payload: any, authToken: string): Promise<any
   }
 }
 
-export async function cadastroLoteConsulta(payload: any, authToken: string): Promise<any> {
+export async function cadastroLoteConsulta(payload: FetchBatchPayload, authToken: string): Promise<any> {
   try {
     const body = encodeJWT(payload);
     const response = await axios.post(`${BASE_URL}/vt-gateway/cadastro/lote/consulta`, body, {
@@ -31,5 +31,20 @@ export async function cadastroLoteConsulta(payload: any, authToken: string): Pro
     return response.data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Falha ao consultar lote");
+  }
+}
+
+export async function cadastroConsulta(payload: registerFetchPayload, authToken: string): Promise<any> {
+  try {
+    const body = encodeJWT(payload);
+    const response = await axios.post(`${BASE_URL}/vt-gateway/cadastro/consulta`, body, {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Falha ao consultar cadastro");
   }
 }

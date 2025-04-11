@@ -1,6 +1,6 @@
 import { AuthService } from "./auth.service";
-import { cadastroLote, cadastroLoteConsulta } from "../api/employee.api";
-import { fetchBatchPayloadSchema, registerBatchPayloadSchema } from "../validations/employee.schema";
+import { cadastroConsulta, cadastroLote, cadastroLoteConsulta } from "../api/employee.api";
+import { fetchBatchPayloadSchema, registerBatchPayloadSchema, registerFetchPayloadSchema } from "../validations/employee.schema";
 
 export class EmployeeService {
   private auth: AuthService;
@@ -50,4 +50,26 @@ export class EmployeeService {
       console.error("Erro ao consultar lote:", error.response?.data || error.message);
     }
   }
+  
+  public async registerFetch(payload: registerFetchPayload): Promise<any> {
+    const authToken = await this.auth.ensureAuthenticated();
+    if (!authToken) {
+      console.error("Falha na autenticação. Não é possível consultar o cadastro.");
+      return;
+    }
+    const parsed = registerFetchPayloadSchema.safeParse(payload);
+    if (!parsed.success) {
+      throw new Error(`Payload de consulta de cadastro inválido: ${parsed.error.format()}`);
+    }
+    try {
+      const response = await cadastroConsulta(payload, authToken);
+      console.log("Resposta da API cadastro/consulta:", response.data);
+      return response.data;
+    }
+    catch (error: any) {
+      console.error("Erro ao consultar cadastro:", error.response?.data || error.message);
+    }
+  }
 }
+
+

@@ -57,3 +57,14 @@ type Colaborador = {
 interface FetchBatchPayload {
   uid: string;
 }
+
+/**
+ * Payload que representa as informações de consulta de cadastro.
+ *
+ * @property documentoComprador - CNPJ ou CPF do comprador.
+ * @property cpfs - Lista de CPFs a serem consultados.
+ */
+interface registerFetchPayload {
+  documentoComprador: string;
+  cpfs: string[];
+}
