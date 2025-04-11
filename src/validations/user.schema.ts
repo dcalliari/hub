@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { isValidCPF, isValidDocument } from "../utils/document.utils";
+
 export const userRechargePayloadSchema = z.object({
   documentoComprador: z.string().refine((doc) => isValidDocument(doc), "Documento do comprador deve ser um CPF ou CNPJ válido"),
   numeroPedidoTicketeira: z.string(),
@@ -9,4 +10,8 @@ export const userRechargePayloadSchema = z.object({
       valor: z.number().positive(),
     })
   ),
+});
+
+export const userRechargeFetchPayloadSchema = z.object({
+  uid: z.string().min(1, "UID deve ser um identificador válido"),
 });
