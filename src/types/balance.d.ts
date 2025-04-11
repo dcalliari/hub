@@ -3,6 +3,6 @@
  * 
  * @property cpfs - Lista de CPFs a serem consultados.
  */
-interface FetchBalancePayload {
+interface BalanceFetchPayload {
   cpfs: string[];
 }

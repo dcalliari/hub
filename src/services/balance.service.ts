@@ -1,6 +1,6 @@
 import { AuthService } from "./auth.service";
 import { saldoConsulta } from "../api/balance.api";
-import { fetchBalancePayloadSchema } from "../validations/balance.schema";
+import { balanceFetchPayloadSchema } from "../validations/balance.schema";
 
 export class BalanceService {
   private auth: AuthService;
@@ -9,14 +9,14 @@ export class BalanceService {
     this.auth = new AuthService();
   }
 
-  public async fetchBalance(payload: FetchBalancePayload): Promise<any> {
+  public async balanceFetch(payload: BalanceFetchPayload): Promise<any> {
     const authToken = await this.auth.ensureAuthenticated();
     if (!authToken) {
       console.error("Falha na autenticação. Não é possível consultar o saldo.");
       return;
     }
 
-    const parsed = fetchBalancePayloadSchema.safeParse(payload);
+    const parsed = balanceFetchPayloadSchema.safeParse(payload);
     if (!parsed.success) {
       throw new Error(`Payload de consulta de saldo inválido: ${parsed.error.format()}`);
     }

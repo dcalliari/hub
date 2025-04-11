@@ -4,7 +4,7 @@ import env from "../env";
 
 const BILLING_URL = env.BILLING_URL!;
 
-export async function saldoConsulta(payload: FetchBalancePayload, authToken: string): Promise<any> {
+export async function saldoConsulta(payload: BalanceFetchPayload, authToken: string): Promise<any> {
   try {
     const body = encodeJWT(payload);
     const response = await axios.post(`${BILLING_URL}/vt-gateway/saldo/consulta`, body, {

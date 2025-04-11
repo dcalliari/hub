@@ -59,9 +59,9 @@ router.post("/test/registerFetch", async (req, res) => {
 });
 
 // Endpoint para testar fetchBalance
-router.post("/test/fetchBalance", async (req, res) => {
+router.post("/test/balanceFetch", async (req, res) => {
   try {
-    const result = await balanceService.fetchBalance(req.body);
+    const result = await balanceService.balanceFetch(req.body);
     res.json(result);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
