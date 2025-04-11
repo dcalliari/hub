@@ -10,15 +10,17 @@ export const registerBatchPayloadSchema = z.object({
       dataNascimento: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Data de nascimento deve estar no formato YYYY-MM-DD"),
       celular: z.string().min(10, "Celular deve ter pelo menos 10 números").regex(/^\d+$/, "Celular deve conter apenas números"),
       solicitarCartao: z.boolean(),
-      enderecoEntrega: z.object({
-        logradouro: z.string(),
-        numeroLogradouro: z.string(),
-        complementoLogradouro: z.string().optional(),
-        bairro: z.string(),
-        cidade: z.string(),
-        cep: z.string().regex(/^\d{5}-\d{3}$/, "CEP deve estar no formato XXXXX-XXX"),
-        uf: z.string().length(2, "UF deve ter exatamente 2 caracteres"),
-      }),
+      enderecoEntrega: z
+        .object({
+          logradouro: z.string(),
+          numeroLogradouro: z.string(),
+          complementoLogradouro: z.string().optional(),
+          bairro: z.string(),
+          cidade: z.string(),
+          cep: z.string().regex(/^\d{8}$/, "CEP deve conter exatamente 8 números"),
+          uf: z.string().length(2, "UF deve ter exatamente 2 caracteres"),
+        })
+        .optional(),
     })
   ),
 });
@@ -29,9 +31,5 @@ export const fetchBatchPayloadSchema = z.object({
 
 export const registerFetchPayloadSchema = z.object({
   documentoComprador: z.string().refine((doc) => isValidDocument(doc), "Documento do comprador deve ser um CPF ou CNPJ válido"),
-  cpfs: z.array(
-    z.object({
-      cpf: z.string().refine((doc) => isValidCPF(doc), "Documento do colaborador deve ser um CPF válido"),
-    })
-  ),
+  cpfs: z.array(z.string().refine((doc) => isValidCPF(doc), "Documento do colaborador deve ser um CPF válido")),
 });

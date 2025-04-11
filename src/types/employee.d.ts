@@ -46,7 +46,7 @@ type Colaborador = {
   dataNascimento: string;
   celular: string;
   solicitarCartao: boolean;
-  enderecoEntrega: EnderecoEntrega;
+  enderecoEntrega?: EnderecoEntrega;
 };
 
 /**
