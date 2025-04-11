@@ -81,7 +81,7 @@ router.post("/test/userRecharge", async (req, res) => {
 });
 
 // Endpoint para testar userRechargeFetch
-router.post("/test/userRechargeFetch", async (req, res) => {// TODO: verificar erro 400 msg: Erro de processamento
+router.post("/test/userRechargeFetch", async (req, res) => {
   try {
     const result = await userService.userRechargeFetch(req.body);
     res.json(result);
