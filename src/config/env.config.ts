@@ -1,4 +1,4 @@
-import { envSchema } from "../validations/env.schema";
+import { envSchema } from "./env.schema";
 
 const environment = {
   ...process.env,
