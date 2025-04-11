@@ -3,8 +3,8 @@ import { jwtDecode } from "jwt-decode";
 import env from "../env";
 
 export class AuthService {
-  private static USER = env.USER!;
-  private static PASSWORD = env.PASSWORD!;
+  private static BILLING_USER = env.BILLING_USER!;
+  private static BILLING_PASSWORD = env.BILLING_PASSWORD!;
   private authToken: string | null = null;
 
   private isTokenExpired(token: string): boolean {
@@ -15,7 +15,7 @@ export class AuthService {
 
   public async authenticate(): Promise<string | null> {
     try {
-      const response = await autenticacao(AuthService.USER, AuthService.PASSWORD);
+      const response = await autenticacao(AuthService.BILLING_USER, AuthService.BILLING_PASSWORD);
       this.authToken = response.token;
       return this.authToken;
     } catch (error: any) {

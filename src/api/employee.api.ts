@@ -2,12 +2,12 @@ import axios from "axios";
 import { encodeJWT } from "../utils/jwt.utils";
 import env from "../env";
 
-const BASE_URL = env.BASE_URL!;
+const BILLING_URL = env.BILLING_URL!;
 
 export async function cadastroLote(payload: RegisterBatchPayload, authToken: string): Promise<any> {
   try {
     const body = encodeJWT(payload);
-    const response = await axios.post(`${BASE_URL}/vt-gateway/cadastro/lote`, body, {
+    const response = await axios.post(`${BILLING_URL}/vt-gateway/cadastro/lote`, body, {
       headers: {
         Authorization: `Bearer ${authToken}`,
         "Content-Type": "application/json",
@@ -22,7 +22,7 @@ export async function cadastroLote(payload: RegisterBatchPayload, authToken: str
 export async function cadastroLoteConsulta(payload: FetchBatchPayload, authToken: string): Promise<any> {
   try {
     const body = encodeJWT(payload);
-    const response = await axios.post(`${BASE_URL}/vt-gateway/cadastro/lote/consulta`, body, {
+    const response = await axios.post(`${BILLING_URL}/vt-gateway/cadastro/lote/consulta`, body, {
       headers: {
         Authorization: `Bearer ${authToken}`,
         "Content-Type": "application/json",
@@ -37,7 +37,7 @@ export async function cadastroLoteConsulta(payload: FetchBatchPayload, authToken
 export async function cadastroConsulta(payload: registerFetchPayload, authToken: string): Promise<any> {
   try {
     const body = encodeJWT(payload);
-    const response = await axios.post(`${BASE_URL}/vt-gateway/cadastro/consulta`, body, {
+    const response = await axios.post(`${BILLING_URL}/vt-gateway/cadastro/consulta`, body, {
       headers: {
         Authorization: `Bearer ${authToken}`,
         "Content-Type": "application/json",

@@ -6,9 +6,9 @@ const environment = {
   SERVER_ENVIRONMENT: process.env.SERVER_ENVIRONMENT || process.env.ENVIRONMENT,
   STAGE: process.env.STAGE,
   PORT: process.env.PORT,
-  BASE_URL: process.env.BASE_URL,
-  USER: process.env.USER,
-  PASSWORD: process.env.PASSWORD,
+  BILLING_URL: process.env.BILLING_URL,
+  BILLING_USER: process.env.BILLING_USER,
+  BILLING_PASSWORD: process.env.BILLING_PASSWORD,
 };
 
 // Validate environment variables against schema

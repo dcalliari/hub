@@ -10,7 +10,7 @@ export const envSchema = z.object({
   }, z.enum(["LocalMachine", "DeployedServer"])),
   STAGE: z.string().min(1),
   PORT: z.string().regex(/^\d+$/).min(1),
-  BASE_URL: z.string().url().min(1),
-  USER: z.string().min(1),
-  PASSWORD: z.string().min(1),
+  BILLING_URL: z.string().url().min(1),
+  BILLING_USER: z.string().min(1),
+  BILLING_PASSWORD: z.string().min(1),
 });

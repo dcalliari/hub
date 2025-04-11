@@ -1,11 +1,12 @@
 import axios from "axios";
 import env from "../env";
 
-const BASE_URL = env.BASE_URL!;
+const BILLING_URL = env.BILLING_URL!;
 
 export async function autenticacao(usuario: string, senha: string): Promise<AuthResponse> {
+  console.log(`Tentando autenticar com usuário: ${usuario} e senha: ${senha}`);
   try {
-    const response = await axios.post<AuthResponse>(`${BASE_URL}/autenticacao`, {
+    const response = await axios.post<AuthResponse>(`${BILLING_URL}/autenticacao`, {
       usuario,
       senha,
     });
