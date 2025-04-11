@@ -44,7 +44,7 @@ export class RegisterService {
 
     try {
       const response = await cadastroLoteConsulta(payload, authToken);
-      console.log("Resposta da API cadastro/consulta:", response.data);
+      console.log("Resposta da API cadastro/lote/consulta:", response.data);
       return response.data;
     } catch (error: any) {
       console.error("Erro ao consultar lote:", error.response?.data || error.message);
