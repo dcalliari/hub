@@ -33,3 +33,18 @@ export async function usuarioRecargaConsulta(payload: UserRechargeFetchPayload, 
     throw new Error(error.response?.data?.message || "Falha ao consultar recarga de usuário");
   }
 }
+
+export async function usuarioConsultaUsoIndevido(payload: any, authToken: string): Promise<any> {
+  try {
+    const body = encodeJWT(payload);
+    const response = await axios.post(`${BILLING_URL}/vt-gateway/usuario/consulta-uso-indevido`, body, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: authToken,
+      },
+    });
+    return response;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Falha ao consultar uso indevido de usuário");
+  }
+}

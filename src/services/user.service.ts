@@ -1,5 +1,5 @@
 import { AuthService } from "./auth.service";
-import { usuarioRecarga, usuarioRecargaConsulta } from "../api/user.api";
+import { usuarioConsultaUsoIndevido, usuarioRecarga, usuarioRecargaConsulta } from "../api/user.api";
 import { userRechargeFetchPayloadSchema, userRechargePayloadSchema } from "../validations/user.schema";
 
 export class UserService {
@@ -48,6 +48,22 @@ export class UserService {
       return response.data;
     } catch (error: any) {
       console.error("Erro ao consultar recarga:", error.response?.data || error.message);
+    }
+  }
+
+  public async userAbuseFetch(payload: any): Promise<any> {
+    const authToken = await this.auth.ensureAuthenticated();
+    if (!authToken) {
+      console.error("Falha na autenticação. Não é possível consultar uso indevido.");
+      return;
+    }
+
+    try {
+      const response = await usuarioConsultaUsoIndevido(payload, authToken);
+      console.log("Resposta da API usuario/consulta-uso-indevido:", response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error("Erro ao consultar uso indevido:", error.response?.data || error.message);
     }
   }
 }
