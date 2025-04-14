@@ -4,6 +4,7 @@ import { RegisterService } from "./services/register.service";
 import { BalanceService } from "./services/balance.service";
 import { UserService } from "./services/user.service";
 import { CardService } from "./services/card.service";
+import { FareService } from "./services/fare.service";
 
 const router = Router();
 const buyerService = new BuyerService();
@@ -11,6 +12,7 @@ const registerService = new RegisterService();
 const balanceService = new BalanceService();
 const userService = new UserService();
 const cardService = new CardService();
+const fareService = new FareService();
 
 // Endpoint para testar buyerRegister
 router.post("/test/buyerRegister", async (req, res) => {
@@ -116,6 +118,16 @@ router.post("/test/cardReplacementFetch", async (req, res) => {// TODO: verifica
 router.post("/test/cardUnlock", async (req, res) => {
   try {
     const result = await cardService.cardUnlock(req.body);
+    res.json(result);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint para testar fareFetch
+router.post("/test/fareFetch", async (req, res) => {
+  try {
+    const result = await fareService.fareFetch(req.body);
     res.json(result);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
