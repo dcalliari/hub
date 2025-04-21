@@ -7,10 +7,10 @@ const bullmq = new BullmqQueue();
 
 export default class CronJobQueue {
     constructor() {
-        // if (
-        //     env.DISABLE_CRONJOB
-        //     || (env.STAGE !== 'test' && env.SERVER_ENVIRONMENT === 'LocalMachine')
-        // ) return;
+        if (
+            env.DISABLE_CRONJOB
+            || (env.STAGE !== 'test' && env.SERVER_ENVIRONMENT === 'LocalMachine')
+        ) return;
 
         new CronJob(env.CRONJOB_INTERVAL, this.processUnprocessed.bind(this)).start();
         console.log(`Cron job started with interval: ${env.CRONJOB_INTERVAL}`);
