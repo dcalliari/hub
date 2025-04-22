@@ -16,6 +16,18 @@ export default class OrderProcess {
     // busca a empresa
     const company = await prisma.salCompany.findUnique({
       where: { id: order.salCompanyId },
+      include: {
+        SalCompanyCredential: {
+          take: 1,
+          select: {
+            SecUser: {
+              select: {
+                email: true,
+              }
+            }
+          },
+        }
+      }
     });
 
     if (!company) {
@@ -23,12 +35,11 @@ export default class OrderProcess {
       return;
     }
 
-    console.log('empresa: ', company) //TODO - remover
-
-    // verifica se a empresa já existe na billing
-    const companyFetch = await this.buyerService.buyerFetch({
-      documentoComprador: company.document,
-    });
+    try {
+      // verifica se a empresa já existe na billing
+      await this.buyerService.buyerFetch({
+        documentoComprador: company.document,
+      });
 
     // se não existir, cria a empresa na billing
     // TODO: verificar retorno de companyFetch
