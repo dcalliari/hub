@@ -18,7 +18,7 @@ export const envSchema = z.object({
   REDIS_PASSWORD: z.string().min(1),
   QUEUE_ORDER: z.string().min(1),
   QUEUE_STATUS: z.string().min(1),
-  CRONJOB_INTERVAL: z.string().default('*/3 * * * *'),
+  CRONJOB_INTERVAL: z.string().default('* * * * *'),
   DISABLE_CRONJOB: z.coerce
   .number()
   .optional()
