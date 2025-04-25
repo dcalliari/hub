@@ -108,7 +108,7 @@ export default class OrderProcess {
       };
     });
 
-    const rechargeUUID = await this.userService.userRecharge({
+    const userRecharge = await this.userService.userRecharge({
       documentoComprador: company.document,
       numeroPedidoTicketeira: order.id.toString(),
       recargas,
@@ -117,8 +117,8 @@ export default class OrderProcess {
     await prisma.salOrder.update({
       where: { id: order.id },
       data: {
-        paymentTransferCode: rechargeUUID, // NOTE: Gambiarra
-        // orderStatusUUID: rechargeUUID,
+        paymentTransferCode: userRecharge.uuid, // NOTE: Gambiarra
+        // orderStatusUUID: userRecharge.uuid,
       },
     })
   }
