@@ -45,11 +45,11 @@ export default class OrderProcess {
     // TODO: verificar retorno de companyFetch
     if (!companyFetch) {
       await this.buyerService.buyerRegister({
-        documentoComprador: company.document,
-        nome: company.name,
-        nomeFantasia: company.description,
-        email: "",
-        telefone: company.contactPhoneNbr || "",
+        documentoComprador: company.document.replace(/\D/g, ""),
+        nome: company.name.replace(/[^a-zA-Z\s]/g, ""),
+        nomeFantasia: company.description.replace(/[^a-zA-Z\s]/g, ""),
+        email: company?.SalCompanyCredential[0].SecUser.email || "tmob@migration.com",
+        telefone: (company.contactPhoneNbr || "").replace(/\D/g, ""),
       });
     }
 
@@ -85,7 +85,7 @@ export default class OrderProcess {
           cpf: employee.document || "",
           nome: employee.name,
           dataNascimento: employee.birthDate?.toISOString().split("T")[0] || "",
-          celular: employee.phone || "",
+          celular: employee.phone || "0000000000",
           solicitarCartao: true,
           enderecoEntrega: {
             logradouro: employee.addrStreet || "",
@@ -93,7 +93,7 @@ export default class OrderProcess {
             complementoLogradouro: employee.addrComplement || "",
             bairro: employee.addrDistrict || "",
             cidade: employee.addrCity || "",
-            cep: employee.addrZipCode || "",
+            cep: (employee.addrZipCode || "").replace(/\D/g, ""),
             uf: employee.addrState || "",
           },
         })),
