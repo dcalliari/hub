@@ -41,9 +41,8 @@ export default class OrderProcess {
         documentoComprador: company.document,
       });
 
-    // se não existir, cria a empresa na billing
-    // TODO: verificar retorno de companyFetch
-    if (!companyFetch) {
+    } catch (error) {
+      // se não existir, cria a empresa na billing
       await this.buyerService.buyerRegister({
         documentoComprador: company.document.replace(/\D/g, ""),
         nome: company.name.replace(/[^a-zA-Z\s]/g, ""),
