@@ -8,7 +8,7 @@ export default class StatusProcess {
     console.log("Starting status processing...");
 
     // busca o pedido na billing
-    const currentStatus = await this.userService.userRechargeFetch({ uuid: status.paymentTransferCode || "" });
+    const currentStatus = await this.userService.userRechargeFetch({ uuid: status.paymentTransferCode });
 
     if (!currentStatus) {
       console.error("Status not found");

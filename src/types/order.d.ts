@@ -11,5 +11,5 @@ interface OrderItem {
 
 interface Status {
   id: number;
-  paymentTransferCode: string | null;
+  paymentTransferCode: string;
 }

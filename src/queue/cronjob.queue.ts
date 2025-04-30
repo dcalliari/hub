@@ -72,7 +72,7 @@ export default class CronJobQueue {
                     id: true,
                     paymentTransferCode: true,
                 }
-            });
+            })) as Array<Status>;
 
             if (statuses.length > 0) {
                 for (const status of statuses) {
