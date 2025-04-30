@@ -30,8 +30,6 @@ export default class OrderProcess {
       documentoComprador: company.document,
     });
 
-    console.log('billing empresa: ', companyFetch) //TODO - remover
-
     // se não existir, cria a empresa na billing
     // TODO: verificar retorno de companyFetch
     if (!companyFetch) {
@@ -61,8 +59,6 @@ export default class OrderProcess {
       documentoComprador: company.document,
       cpfs: employees.map((employee) => employee.document || ""),
     });
-
-    console.log('billing funcionarios:', employeeFetch) //TODO - remover
 
     // filtra os funcionários que precisam ser criados (status 3)
     const employeesToCreate = employees.filter((employee) => {
