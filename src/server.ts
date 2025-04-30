@@ -5,9 +5,13 @@ import cors from "cors";
 
 import env from "./env";
 import testRoutes from "./test.routes";
+import NewQueue from "./queue/new.queue";
+import CronJobQueue from "./queue/cronjob.queue";
 
 class Server {
   private server = express();
+  private queue = new NewQueue();
+  private job = new CronJobQueue();
 
   constructor() {
     this.configureServer();

@@ -9,6 +9,13 @@ const environment = {
   BILLING_URL: process.env.BILLING_URL,
   BILLING_USER: process.env.BILLING_USER,
   BILLING_PASSWORD: process.env.BILLING_PASSWORD,
+  REDIS_HOST: process.env.REDIS_HOST,
+  REDIS_PORT: process.env.REDIS_PORT,
+  REDIS_PASSWORD: process.env.REDIS_PASSWORD,
+  QUEUE_ORDER: process.env.QUEUE_ORDER,
+  QUEUE_STATUS: process.env.QUEUE_STATUS,
+  CRONJOB_INTERVAL: process.env.CRONJOB_INTERVAL,
+  DISABLE_CRONJOB: process.env.DISABLE_CRONJOB,
 };
 
 // Validate environment variables against schema
