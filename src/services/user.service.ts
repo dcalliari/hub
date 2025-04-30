@@ -6,7 +6,7 @@ export class UserService {
   private auth: AuthService;
 
   constructor() {
-    this.auth = new AuthService();
+    this.auth = AuthService.getInstance();
   }
 
   public async userRecharge(payload: UserRechargePayload): Promise<any> {

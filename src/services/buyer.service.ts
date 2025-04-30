@@ -6,7 +6,7 @@ export class BuyerService {
   private auth: AuthService;
 
   constructor() {
-    this.auth = new AuthService();
+    this.auth = AuthService.getInstance();
   }
 
   public async buyerRegister(payload: BuyerRegisterPayload): Promise<any> {

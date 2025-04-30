@@ -5,7 +5,7 @@ export class FareService {
   private auth: AuthService;
 
   constructor() {
-    this.auth = new AuthService();
+    this.auth = AuthService.getInstance();
   }
 
   public async fareFetch(payload: any): Promise<any> {

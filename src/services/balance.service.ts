@@ -6,7 +6,7 @@ export class BalanceService {
   private auth: AuthService;
 
   constructor() {
-    this.auth = new AuthService();
+    this.auth = AuthService.getInstance();
   }
 
   public async balanceFetch(payload: BalanceFetchPayload): Promise<any> {

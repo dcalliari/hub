@@ -6,7 +6,7 @@ export class RegisterService {
   private auth: AuthService;
 
   constructor() {
-    this.auth = new AuthService();
+    this.auth = AuthService.getInstance();
   }
 
   public async registerBatch(payload: RegisterBatchPayload): Promise<any> {

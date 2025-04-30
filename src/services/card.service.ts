@@ -6,7 +6,7 @@ export class CardService {
   private auth: AuthService;
 
   constructor() {
-    this.auth = new AuthService();
+    this.auth = AuthService.getInstance();
   }
 
   public async cardReplacement(payload: CardReplacementPayload): Promise<any> {

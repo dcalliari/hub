@@ -3,9 +3,21 @@ import { jwtDecode } from "jwt-decode";
 import env from "../env";
 
 export class AuthService {
+  private static instance: AuthService
   private static BILLING_USER = env.BILLING_USER!;
   private static BILLING_PASSWORD = env.BILLING_PASSWORD!;
   private authToken: string | null = null;
+
+  private constructor() {
+    // Singleton pattern to ensure only one instance of AuthService
+  }
+
+  public static getInstance(): AuthService {
+    if (!AuthService.instance) {
+      AuthService.instance = new AuthService();
+    }
+    return AuthService.instance;
+  }
 
   private isTokenExpired(token: string): boolean {
     const decoded: JwtPayload = jwtDecode(token);
