@@ -28,10 +28,10 @@ export default class CronJobQueue {
 
             const orders: Order[] = await prisma.salOrder.findMany({
                 where: {
-                        isPaid: true,
-                        isReleased: false,
-                        paymentTransferCode: null, // NOTE: Gambiarra
-                        // orderStatusUUID: null,
+                    isPaid: true,
+                    isReleased: false,
+                    paymentTransferCode: null, // NOTE: Gambiarra
+                    // orderStatusUUID: null,
                 },
                 select: {
                     id: true,
@@ -46,8 +46,10 @@ export default class CronJobQueue {
                 },
             });
 
-            for (const order of orders) {
-                await bullmq.addNewOrder(order);
+            if (orders.length > 0) {
+                for (const order of orders) {
+                    await bullmq.addNewOrder(order);
+                }
             }
 
         } catch (error) {
@@ -59,11 +61,11 @@ export default class CronJobQueue {
         try {
             console.log(`Executing Cron Status ${new Date().toLocaleString()}`);
 
-            const statuses: Status[] = await prisma.salOrder.findMany({
+            const statuses: Status[] = await (prisma.salOrder.findMany({
                 where: {
                     isPaid: true,
                     isReleased: false,
-                    NOT: { paymentTransferCode: null}  // NOTE: Gambiarra
+                    paymentTransferCode: { not: null }  // NOTE: Gambiarra
                     // NOT: { orderStatusUUID: null}
                 },
                 select: {
@@ -72,8 +74,10 @@ export default class CronJobQueue {
                 }
             });
 
-            for (const status of statuses) {
-                await bullmq.addNewStatus(status);
+            if (statuses.length > 0) {
+                for (const status of statuses) {
+                    await bullmq.addNewStatus(status);
+                }
             }
 
         } catch (error) {
