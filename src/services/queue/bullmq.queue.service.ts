@@ -3,6 +3,7 @@ import env from "../../env";
 
 export class BullmqQueue {
   private orderQueue: Queue;
+  private statusQueue: Queue;
   private QUEUE_ORDER = env.QUEUE_ORDER;
   private QUEUE_STATUS = env.QUEUE_STATUS;
 
@@ -22,6 +23,7 @@ export class BullmqQueue {
 
     // Criar uma nova instância da fila com as opções do Redis
     this.orderQueue = new Queue(this.QUEUE_ORDER, { connection: redisOptions });
+    this.statusQueue = new Queue(this.QUEUE_STATUS, { connection: redisOptions });
   }
 
   async addNewOrder(order: Order) {
@@ -46,7 +48,7 @@ export class BullmqQueue {
   async addNewStatus(status: Status) {
     try {
       // Adicionar a novo status à fila
-      await this.orderQueue.add(
+      await this.statusQueue.add(
         this.QUEUE_STATUS, status,
         {
           // BullMQ exige que o jobId seja uma string não númerica
