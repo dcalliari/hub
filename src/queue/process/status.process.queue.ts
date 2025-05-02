@@ -16,13 +16,13 @@ export default class StatusProcess {
     }
 
     // volta para a fila caso o status seja 1 (pendente)
-    if (currentStatus.statusPedido === 1){
+    if (currentStatus.statusPedido === 1) {
       console.log("Status in progress");
       return;
     }
 
     // atualiza o status do pedido caso o status seja 2 (concluído)
-    if (currentStatus.statusPedido === 2){
+    if (currentStatus.statusPedido === 2) {
       console.log("Status concluded");
       await prisma.salOrder.update({
         where: { id: status.id },
@@ -34,6 +34,6 @@ export default class StatusProcess {
       });
     }
 
-    // tratar outros status (3 - Processamento com Erro e 4 - Nenhum registro importado)
+    // TODO: tratar outros status (3 - Processamento com Erro e 4 - Nenhum registro importado)
   }
 }
