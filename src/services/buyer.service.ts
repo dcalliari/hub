@@ -26,7 +26,7 @@ export class BuyerService {
       console.log("Resposta da API comprador/cadastro:", response.data);
       return response.data;
     } catch (error: any) {
-      console.error("Erro ao cadastrar comprador:", error.response?.data || error.message);
+      throw new Error(`Erro ao cadastrar comprador: ${error.response?.data || error.message}`);
     }
   }
 
@@ -47,7 +47,7 @@ export class BuyerService {
       console.log("Resposta da API comprador/consulta:", response.data);
       return response.data;
     } catch (error: any) {
-      console.error("Erro ao consultar comprador:", error.response?.data || error.message);
+      throw new Error(`Erro ao consultar comprador: ${error.response?.data || error.message}`);
     }
   }
 }
