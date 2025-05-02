@@ -43,7 +43,7 @@ class NewQueue {
     statusWorker.on('completed', (job: any, result: any) => {
       console.log(`Job ${job.id} completed with result:`, result);
     });
-  
+
     statusWorker.on('failed', (job: any, err: any) => {
       console.error(`Job ${job.id} failed with error:`, err);
     });
