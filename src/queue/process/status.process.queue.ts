@@ -27,9 +27,10 @@ export default class StatusProcess {
       await prisma.salOrder.update({
         where: { id: status.id },
         data: {
-          isPaid: true,
           isReleased: true,
+          releaseDate: new Date(),
           paymentTransferCode: currentStatus.uid,
+          blameUser: 'carioca_hub'
         },
       });
     }
