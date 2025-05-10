@@ -1,12 +1,12 @@
+import { Channel } from "amqplib";
 import { prisma } from "../../database/prisma.database";
 import { BuyerService } from "../../services/buyer.service";
 import { RegisterService } from "../../services/register.service";
-import { RabbitMQConnection } from "../connection/rabbitmq.connection.queue";
 
 export default class EmployeeProcess {
   private registerService = new RegisterService();
   private buyerService = new BuyerService();
-  async process(employee: Employee) {
+  async process(employee: Employee, channel: Channel) {
     console.log("Starting employee processing...");
 
     // verifica se a empresa já existe na billing
@@ -16,9 +16,6 @@ export default class EmployeeProcess {
       });
     } catch (error) {
       // se não existir, envia a empresa para a fila company-new
-      const rabbitConnection = RabbitMQConnection.getInstance();
-      const channel = await rabbitConnection.createChannel("company-new");
-
       const company = (await prisma.$queryRaw<Company[]>`
       SELECT sc.id, sc.document, sc.name, sc.description, su.email, sc."contactPhoneNbr" as phone
       FROM salesportal."SalCompany" sc
