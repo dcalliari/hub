@@ -12,8 +12,7 @@ export class BuyerService {
   public async buyerRegister(payload: BuyerRegisterPayload): Promise<any> {
     const authToken = await this.auth.ensureAuthenticated();
     if (!authToken) {
-      console.error("Falha na autenticação. Não é possível cadastrar o comprador.");
-      return;
+      throw new Error("Falha na autenticação. Não é possível cadastrar o comprador.");
     }
 
     const parsed = buyerRegisterPayloadSchema.safeParse(payload);
@@ -33,8 +32,7 @@ export class BuyerService {
   public async buyerFetch(payload: BuyerFetchPayload): Promise<any> {
     const authToken = await this.auth.ensureAuthenticated();
     if (!authToken) {
-      console.error("Falha na autenticação. Não é possível consultar o comprador.");
-      return;
+      throw new Error("Falha na autenticação. Não é possível consultar o comprador.");
     }
 
     const parsed = buyerFetchPayloadSchema.safeParse(payload);

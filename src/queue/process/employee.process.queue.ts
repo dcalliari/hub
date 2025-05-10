@@ -1,0 +1,62 @@
+import { prisma } from "../../database/prisma.database";
+import { BuyerService } from "../../services/buyer.service";
+import { RegisterService } from "../../services/register.service";
+import { RabbitMQConnection } from "../connection/rabbitmq.connection.queue";
+
+export default class EmployeeProcess {
+  private registerService = new RegisterService();
+  private buyerService = new BuyerService();
+  async process(employee: Employee) {
+    console.log("Starting employee processing...");
+
+    // verifica se a empresa já existe na billing
+    try {
+      await this.buyerService.buyerFetch({
+        documentoComprador: employee.companyDocument,
+      });
+    } catch (error) {
+      // se não existir, envia a empresa para a fila company-new
+      const rabbitConnection = RabbitMQConnection.getInstance();
+      const channel = await rabbitConnection.createChannel("company-new");
+
+      const company = await prisma.$queryRaw<Company[]>`
+      SELECT sc.id, sc.document, sc.name, sc.description, su.email, sc."contactPhoneNbr"
+      FROM salesportal."SalCompany" sc
+      LEFT JOIN "security"."SecUser" su
+      ON sc.DOCUMENT = su."document"
+      WHERE sc.document = 1${employee.companyDocument};
+    `;
+      await channel.sendToQueue("company-new", Buffer.from(JSON.stringify(company[0])));
+      console.log("Company not found in billing, sending to company-new queue");
+
+      // devolve o employee para a fila employee-new
+      const employeeQueue = await rabbitConnection.createChannel("employee-new");
+      await employeeQueue.sendToQueue("employee-new", Buffer.from(JSON.stringify(employee)));
+      console.log("Employee going back to employee-new queue");
+      return;
+    }
+
+    // registra o funcionário na billing
+    await this.registerService.registerBatch({
+      documentoComprador: employee.companyDocument,
+      colaboradores: [
+        {
+          cpf: employee.document || "",
+          nome: employee.name || "",
+          dataNascimento: employee.birthDate || "",
+          celular: employee.phone || "0000000000",
+          solicitarCartao: true,
+          enderecoEntrega: {
+            logradouro: employee.deliveryAddress.street || "",
+            numeroLogradouro: employee.deliveryAddress.number || "",
+            complementoLogradouro: employee.deliveryAddress.complement || "",
+            bairro: employee.deliveryAddress.district || "",
+            cidade: employee.deliveryAddress.city || "",
+            cep: (employee.deliveryAddress.zipCode || "").replace(/\D/g, ""),
+            uf: employee.deliveryAddress.state || "",
+          },
+        },
+      ]
+    });
+  }
+}

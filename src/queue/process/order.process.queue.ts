@@ -2,6 +2,7 @@ import { prisma } from "../../database/prisma.database";
 import { BuyerService } from "../../services/buyer.service";
 import { RegisterService } from "../../services/register.service";
 import { UserService } from "../../services/user.service";
+import { RabbitMQConnection } from "../connection/rabbitmq.connection.queue";
 
 export default class OrderProcess {
   private buyerService = new BuyerService();
@@ -14,25 +15,16 @@ export default class OrderProcess {
     console.log("Starting order processing...");
 
     // busca a empresa
-    const company = await prisma.salCompany.findUnique({
-      where: { id: order.salCompanyId },
-      include: {
-        SalCompanyCredential: {
-          take: 1,
-          select: {
-            SecUser: {
-              select: {
-                email: true,
-              }
-            }
-          },
-        }
-      }
-    });
+    const company = (await prisma.$queryRaw<Company[]>`
+      SELECT sc.id, sc.document, sc.name, sc.description, su.email, sc."contactPhoneNbr"
+      FROM salesportal."SalCompany" sc
+      LEFT JOIN "security"."SecUser" su
+      ON sc.DOCUMENT = su."document"
+      WHERE sc.id = 1${order.salCompanyId};
+    `)[0];
 
     if (!company) {
-      console.error("Company not found");
-      return;
+      throw new Error("Company not found");
     }
 
     try {
@@ -42,27 +34,29 @@ export default class OrderProcess {
       });
 
     } catch (error) {
-      // se não existir, cria a empresa na billing
-      await this.buyerService.buyerRegister({
-        documentoComprador: company.document.replace(/\D/g, ""),
-        nome: company.name.replace(/[^a-zA-Z\s]/g, ""),
-        nomeFantasia: company.description.replace(/[^a-zA-Z\s]/g, ""),
-        email: company?.SalCompanyCredential[0].SecUser.email || "tmob@migration.com",
-        telefone: (company.contactPhoneNbr || "").replace(/\D/g, ""),
-      });
-    }
+      // se não existir, envia a empresa para a fila company-new
+      const rabbitConnection = RabbitMQConnection.getInstance();
+      const channel = await rabbitConnection.createChannel("company-new");
+      await channel.sendToQueue("company-new", Buffer.from(JSON.stringify(company)));
+      console.log("Company not found in billing, sending to company-new queue");
 
-    // busca todos os funcionários relacionados ao pedido
-    const employees = await prisma.salEmployee.findMany({
-      where: { id: { in: order.SalOrderItem.map((item) => item.salEmployeeId) } },
-    });
-
-    if (!employees || employees.length === 0) {
-      console.error("Employees not found");
+      // devolve o order para a fila order-new
+      const orderChannel = await rabbitConnection.createChannel("order-new");
+      await orderChannel.sendToQueue("order-new", Buffer.from(JSON.stringify(order)));
+      console.log("Order going back to order-new queue");
       return;
     }
 
-    console.log('funcionarios:', employees) //TODO - remover
+    // busca todos os funcionários relacionados ao pedido
+    const employees = await prisma.$queryRaw<Employee[]>`
+      SELECT *
+      FROM salesportal."SalEmployee"
+      WHERE id IN (${order.SalOrderItem.map((item) => item.salEmployeeId).join(",")});
+    `;
+
+    if (!employees || employees.length === 0) {
+      throw new Error("Employees not found");
+    }
 
     // verifica se os funcionários já existem
     const employeeFetch = await this.registerService.registerFetch({
@@ -83,17 +77,17 @@ export default class OrderProcess {
         colaboradores: employeesToCreate.map((employee) => ({
           cpf: employee.document || "",
           nome: employee.name,
-          dataNascimento: employee.birthDate?.toISOString().split("T")[0] || "",
+          dataNascimento: employee.birthDate || "",
           celular: employee.phone || "0000000000",
           solicitarCartao: true,
           enderecoEntrega: {
-            logradouro: employee.addrStreet || "",
-            numeroLogradouro: employee.addrNbr || "",
-            complementoLogradouro: employee.addrComplement || "",
-            bairro: employee.addrDistrict || "",
-            cidade: employee.addrCity || "",
-            cep: (employee.addrZipCode || "").replace(/\D/g, ""),
-            uf: employee.addrState || "",
+            logradouro: employee.deliveryAddress.street || "",
+            numeroLogradouro: employee.deliveryAddress.number || "",
+            complementoLogradouro: employee.deliveryAddress.complement || "",
+            bairro: employee.deliveryAddress.district || "",
+            cidade: employee.deliveryAddress.city || "",
+            cep: (employee.deliveryAddress.zipCode || "").replace(/\D/g, ""),
+            uf: employee.deliveryAddress.state || "",
           },
         })),
       });
@@ -113,12 +107,15 @@ export default class OrderProcess {
       recargas,
     });
 
-    await prisma.salOrder.update({
-      where: { id: order.id },
-      data: {
-        paymentTransferCode: userRecharge.uuid, // NOTE: Gambiarra
-        // orderStatusUUID: userRecharge.uuid,
-      },
-    })
+    // Envia o UUID da recarga para a fila "status-new"
+    const rabbitConnection = RabbitMQConnection.getInstance();
+    const channel = await rabbitConnection.createChannel("status-new");
+    await channel.sendToQueue("status-new", Buffer.from(JSON.stringify({ uuid: userRecharge.uuid })));
+
+    await prisma.$executeRaw`
+      UPDATE salesportal."SalOrder"
+      SET "paymentTransferCode" = ${userRecharge.uuid} -- // NOTE: Gambiarra deveria ter uma coluna orderStatusUUID
+      WHERE id = ${order.id};
+    `;
   }
 }

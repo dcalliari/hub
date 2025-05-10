@@ -12,8 +12,7 @@ export class RegisterService {
   public async registerBatch(payload: RegisterBatchPayload): Promise<any> {
     const authToken = await this.auth.ensureAuthenticated();
     if (!authToken) {
-      console.error("Falha na autenticação. Não é possível cadastrar o lote.");
-      return;
+      throw new Error("Falha na autenticação. Não é possível cadastrar o lote.");
     }
 
     const parsed = registerBatchPayloadSchema.safeParse(payload);
@@ -26,7 +25,7 @@ export class RegisterService {
       console.log("Resposta da API cadastro/lote:", response.data);
       return response.data;
     } catch (error: any) {
-      console.error("Erro ao cadastrar lote:", error.response?.data || error.message);
+      throw new Error(`Erro ao cadastrar lote: ${error.response?.data || error.message}`);
     }
   }
 
