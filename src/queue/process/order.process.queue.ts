@@ -41,11 +41,28 @@ export default class OrderProcess {
 
     // busca todos os funcionários relacionados ao pedido
     const employeeIds = order.SalOrderItem.map((item) => Number(item.salEmployeeId)).filter((id) => !isNaN(id));
-    const employees = await prisma.$queryRaw<Employee[]>`
-      SELECT *
-      FROM salesportal."SalEmployee"
-      WHERE id = ANY(ARRAY[${employeeIds.join(",")}]::INTEGER[]);
-    `;
+    const employees = (await prisma.$queryRaw<any[]>`
+      SELECT se.id, sc.document as "companyDocument", se.name, se.document, se."birthDate", se."phone",
+      se."addrStreet" as "deliveryAddress.street", se."addrNbr" as "deliveryAddress.number",
+      se."addrComplement" as "deliveryAddress.complement", se."addrDistrict" as "deliveryAddress.district",
+      se."addrCity" as "deliveryAddress.city", se."addrZipCode" as "deliveryAddress.zipCode",
+      se."addrState" as "deliveryAddress.state"
+      FROM salesportal."SalEmployee" se
+      LEFT JOIN salesportal."SalCompany" sc
+      ON se."salCompanyId" = sc.id
+      WHERE se.id = ANY(ARRAY[${employeeIds.join(",")}]::INTEGER[]);
+    `).map((employee) => ({
+      ...employee,
+      deliveryAddress: {
+        street: employee["deliveryAddress.street"],
+        number: employee["deliveryAddress.number"],
+        complement: employee["deliveryAddress.complement"],
+        district: employee["deliveryAddress.district"],
+        city: employee["deliveryAddress.city"],
+        zipCode: employee["deliveryAddress.zipCode"],
+        state: employee["deliveryAddress.state"],
+      },
+    })) as Employee[];
 
     if (!employees || employees.length === 0) {
       throw new Error("Employees not found");
