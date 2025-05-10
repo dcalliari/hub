@@ -39,12 +39,6 @@ export default class OrderProcess {
       const channel = await rabbitConnection.createChannel("company-new");
       await channel.sendToQueue("company-new", Buffer.from(JSON.stringify(company)));
       console.log("Company not found in billing, sending to company-new queue");
-
-      // devolve o order para a fila order-new
-      const orderChannel = await rabbitConnection.createChannel("order-new");
-      await orderChannel.sendToQueue("order-new", Buffer.from(JSON.stringify(order)));
-      console.log("Order going back to order-new queue");
-      return;
     }
 
     // busca todos os funcionários relacionados ao pedido

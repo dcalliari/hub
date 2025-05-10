@@ -33,12 +33,6 @@ export default class EmployeeProcess {
 
       await channel.sendToQueue("company-new", Buffer.from(JSON.stringify(company)));
       console.log("Company not found in billing, sending to company-new queue");
-
-      // devolve o employee para a fila employee-new
-      const employeeQueue = await rabbitConnection.createChannel("employee-new");
-      await employeeQueue.sendToQueue("employee-new", Buffer.from(JSON.stringify(employee)));
-      console.log("Employee going back to employee-new queue");
-      return;
     }
 
     // registra o funcionário na billing
