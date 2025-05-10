@@ -35,7 +35,7 @@ export default class OrderProcess {
 
     } catch (error) {
       // se não existir, envia a empresa para a fila company-new
-      await channel.sendToQueue("company-new", Buffer.from(JSON.stringify(company)));
+      await channel.sendToQueue("company-new", Buffer.from(JSON.stringify(company)), { headers: { "x-delay": 5000 } });
       console.log("Company not found in billing, sending to company-new queue");
     }
 
