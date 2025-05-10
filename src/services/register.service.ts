@@ -17,7 +17,7 @@ export class RegisterService {
 
     const parsed = registerBatchPayloadSchema.safeParse(payload);
     if (!parsed.success) {
-      throw new Error(`Payload de cadastro de lote inválido: ${parsed.error.format()}`);
+      throw new Error(`Payload de cadastro de lote inválido: ${JSON.stringify(parsed.error.format())}`);
     }
 
     try {
@@ -38,7 +38,7 @@ export class RegisterService {
 
     const parsed = registerFetchBatchPayloadSchema.safeParse(payload);
     if (!parsed.success) {
-      throw new Error(`Payload de consulta de lote inválido: ${parsed.error.format()}`);
+      throw new Error(`Payload de consulta de lote inválido: ${JSON.stringify(parsed.error.format())}`);
     }
 
     try {
@@ -58,7 +58,7 @@ export class RegisterService {
     }
     const parsed = registerFetchPayloadSchema.safeParse(payload);
     if (!parsed.success) {
-      throw new Error(`Payload de consulta de cadastro inválido: ${parsed.error.format()}`);
+      throw new Error(`Payload de consulta de cadastro inválido: ${JSON.stringify(parsed.error.format())}`);
     }
     try {
       const response = await cadastroConsulta(payload, authToken);

@@ -18,7 +18,7 @@ export class CardService {
 
     const parsed = cardReplacementPayloadSchema.safeParse(payload);
     if (!parsed.success) {
-      throw new Error(`Payload de segunda-via inválido: ${parsed.error.format()}`);
+      throw new Error(`Payload de segunda-via inválido: ${JSON.stringify(parsed.error.format())}`);
     }
 
     try {
@@ -39,7 +39,7 @@ export class CardService {
 
     const parsed = cardReplacementFetchPayloadSchema.safeParse(payload);
     if (!parsed.success) {
-      throw new Error(`Payload de consulta de segunda-via inválido: ${parsed.error.format()}`);
+      throw new Error(`Payload de consulta de segunda-via inválido: ${JSON.stringify(parsed.error.format())}`);
     }
 
     try {
@@ -60,7 +60,7 @@ export class CardService {
   
       const parsed = cardUnlockPayloadSchema.safeParse(payload);
       if (!parsed.success) {
-        throw new Error(`Payload de desbloqueio de cartões inválido: ${parsed.error.format()}`);
+        throw new Error(`Payload de desbloqueio de cartões inválido: ${JSON.stringify(parsed.error.format())}`);
       }
   
       try {

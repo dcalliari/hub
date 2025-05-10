@@ -17,7 +17,7 @@ export class BuyerService {
 
     const parsed = buyerRegisterPayloadSchema.safeParse(payload);
     if (!parsed.success) {
-      throw new Error(`Payload de cadastro de comprador inválido: ${parsed.error.format()}`);
+      throw new Error(`Payload de cadastro de comprador inválido: ${JSON.stringify(parsed.error.format())}`);
     }
 
     try {
@@ -37,7 +37,7 @@ export class BuyerService {
 
     const parsed = buyerFetchPayloadSchema.safeParse(payload);
     if (!parsed.success) {
-      throw new Error(`Payload de consulta de comprador inválido: ${parsed.error.format()}`);
+      throw new Error(`Payload de consulta de comprador inválido: ${JSON.stringify(parsed.error.format())}`);
     }
 
     try {

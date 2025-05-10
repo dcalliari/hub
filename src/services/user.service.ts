@@ -18,7 +18,7 @@ export class UserService {
 
     const parsed = userRechargePayloadSchema.safeParse(payload);
     if (!parsed.success) {
-      throw new Error(`Payload de recarga inválido: ${parsed.error.format()}`);
+      throw new Error(`Payload de recarga inválido: ${JSON.stringify(parsed.error.format())}`);
     }
 
     try {
@@ -39,7 +39,7 @@ export class UserService {
 
     const parsed = userRechargeFetchPayloadSchema.safeParse(payload);
     if (!parsed.success) {
-      throw new Error(`Payload de consulta de recarga inválido: ${parsed.error.format()}`);
+      throw new Error(`Payload de consulta de recarga inválido: ${JSON.stringify(parsed.error.format())}`);
     }
 
     try {

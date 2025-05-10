@@ -18,7 +18,7 @@ export class BalanceService {
 
     const parsed = balanceFetchPayloadSchema.safeParse(payload);
     if (!parsed.success) {
-      throw new Error(`Payload de consulta de saldo inválido: ${parsed.error.format()}`);
+      throw new Error(`Payload de consulta de saldo inválido: ${JSON.stringify(parsed.error.format())}`);
     }
 
     try {
