@@ -30,7 +30,7 @@ export class OrderWorker {
       const order: Order = JSON.parse(msg.content.toString());
       console.log(`Processing order order ${order.id}...`);
 
-      await this.process(order);
+      await this.process(order, this.channel);
 
       // Confirm successful processing
       this.channel.ack(msg);
@@ -58,10 +58,10 @@ export class OrderWorker {
     }
   }
 
-  public async process(order: Order): Promise<void> {
+  public async process(order: Order, channel: Channel): Promise<void> {
     try {
       const processor = new OrderProcess();
-      return await processor.process(order);
+      return await processor.process(order, channel);
     } catch (error) {
       console.error(new Date(), `Error processing order ${order.id}:`, error);
       throw error;

@@ -1,8 +1,8 @@
+import { Channel } from "amqplib";
 import { prisma } from "../../database/prisma.database";
 import { BuyerService } from "../../services/buyer.service";
 import { RegisterService } from "../../services/register.service";
 import { UserService } from "../../services/user.service";
-import { RabbitMQConnection } from "../connection/rabbitmq.connection.queue";
 
 export default class OrderProcess {
   private buyerService = new BuyerService();
@@ -11,7 +11,7 @@ export default class OrderProcess {
 
   private userService = new UserService();
 
-  async process(order: Order) {
+  async process(order: Order, channel: Channel): Promise<void> {
     console.log("Starting order processing...");
 
     // busca a empresa
@@ -35,8 +35,6 @@ export default class OrderProcess {
 
     } catch (error) {
       // se não existir, envia a empresa para a fila company-new
-      const rabbitConnection = RabbitMQConnection.getInstance();
-      const channel = await rabbitConnection.createChannel("company-new");
       await channel.sendToQueue("company-new", Buffer.from(JSON.stringify(company)));
       console.log("Company not found in billing, sending to company-new queue");
     }
@@ -102,8 +100,6 @@ export default class OrderProcess {
     });
 
     // Envia o UUID da recarga para a fila "status-new"
-    const rabbitConnection = RabbitMQConnection.getInstance();
-    const channel = await rabbitConnection.createChannel("status-new");
     await channel.sendToQueue("status-new", Buffer.from(JSON.stringify({ uuid: userRecharge.uuid })));
 
     await prisma.$executeRaw`
