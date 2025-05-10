@@ -1,7 +1,8 @@
 import { Channel } from "amqplib";
 import { CompanyWorker } from "../worker/company.worker.queue";
-import { StatusWorker } from "../worker/status.worker.queue";
 import { EmployeeWorker } from "../worker/employee.worker.queue";
+import { OrderWorker } from "../worker/order.worker.queue";
+import { StatusWorker } from "../worker/status.worker.queue";
 
 interface Worker {
   queueName: string;
@@ -29,6 +30,8 @@ export class WorkerRegistry {
     
     this.registerWorker(new EmployeeWorker('employee-new'));
 
+    this.registerWorker(new OrderWorker('order-new'));
+    
     this.registerWorker(new StatusWorker('status-new'));
   }
 
