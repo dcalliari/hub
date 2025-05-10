@@ -16,11 +16,11 @@ export default class OrderProcess {
 
     // busca a empresa
     const company = (await prisma.$queryRaw<Company[]>`
-      SELECT sc.id, sc.document, sc.name, sc.description, su.email, sc."contactPhoneNbr"
+      SELECT sc.id, sc.document, sc.name, sc.description, su.email, sc."contactPhoneNbr" as phone
       FROM salesportal."SalCompany" sc
       LEFT JOIN "security"."SecUser" su
       ON sc.DOCUMENT = su."document"
-      WHERE sc.id = 1${order.salCompanyId};
+      WHERE sc.id = ${order.salCompanyId};
     `)[0];
 
     if (!company) {
