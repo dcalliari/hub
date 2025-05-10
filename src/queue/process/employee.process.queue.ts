@@ -19,14 +19,19 @@ export default class EmployeeProcess {
       const rabbitConnection = RabbitMQConnection.getInstance();
       const channel = await rabbitConnection.createChannel("company-new");
 
-      const company = await prisma.$queryRaw<Company[]>`
-      SELECT sc.id, sc.document, sc.name, sc.description, su.email, sc."contactPhoneNbr"
+      const company = (await prisma.$queryRaw<Company[]>`
+      SELECT sc.id, sc.document, sc.name, sc.description, su.email, sc."contactPhoneNbr" as phone
       FROM salesportal."SalCompany" sc
       LEFT JOIN "security"."SecUser" su
       ON sc.DOCUMENT = su."document"
-      WHERE sc.document = 1${employee.companyDocument};
-    `;
-      await channel.sendToQueue("company-new", Buffer.from(JSON.stringify(company[0])));
+      WHERE sc.document = ${employee.companyDocument};
+    `)[0];
+
+      if (!company) {
+        throw new Error("Company not found");
+      }
+
+      await channel.sendToQueue("company-new", Buffer.from(JSON.stringify(company)));
       console.log("Company not found in billing, sending to company-new queue");
 
       // devolve o employee para a fila employee-new
