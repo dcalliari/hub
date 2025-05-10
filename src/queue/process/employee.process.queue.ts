@@ -41,7 +41,7 @@ export default class EmployeeProcess {
           nome: employee.name || "",
           dataNascimento: employee.birthDate || "",
           celular: employee.phone || "0000000000",
-          solicitarCartao: true,
+          solicitarCartao: false,
           enderecoEntrega: {
             logradouro: employee.deliveryAddress.street || "",
             numeroLogradouro: employee.deliveryAddress.number || "",
