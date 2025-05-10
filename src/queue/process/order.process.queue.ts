@@ -51,9 +51,8 @@ export default class OrderProcess {
       LEFT JOIN salesportal."SalCompany" sc
       ON se."salCompanyId" = sc.id
       WHERE se.id = ANY(ARRAY[${employeeIds.join(",")}]::INTEGER[]);
-    `).map((employee) => ({
-      ...employee,
-      deliveryAddress: {
+    `).map((employee) => {
+      const deliveryAddress = {
         street: employee["deliveryAddress.street"],
         number: employee["deliveryAddress.number"],
         complement: employee["deliveryAddress.complement"],
@@ -61,9 +60,20 @@ export default class OrderProcess {
         city: employee["deliveryAddress.city"],
         zipCode: employee["deliveryAddress.zipCode"],
         state: employee["deliveryAddress.state"],
-      },
-    })) as Employee[];
+      };
 
+      // remove os campos desnecessários
+      delete employee["deliveryAddress.street"];
+      delete employee["deliveryAddress.number"];
+      delete employee["deliveryAddress.complement"];
+      delete employee["deliveryAddress.district"];
+      delete employee["deliveryAddress.city"];
+      delete employee["deliveryAddress.zipCode"];
+      delete employee["deliveryAddress.state"];
+
+      return { ...employee, deliveryAddress };
+    }) as Employee[];
+    
     if (!employees || employees.length === 0) {
       throw new Error("Employees not found");
     }
