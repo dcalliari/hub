@@ -1,17 +1,14 @@
 import "./env";
 import express from "express";
-import path from "path";
 import cors from "cors";
 
 import env from "./env";
 import testRoutes from "./test.routes";
-import NewQueue from "./queue/new.queue";
-import CronJobQueue from "./queue/cronjob.queue";
+import StartQueue from "./queue/start.queue";
 
 class Server {
   private server = express();
-  private queue = new NewQueue();
-  private job = new CronJobQueue();
+  private queue = new StartQueue();
 
   constructor() {
     this.configureServer();
@@ -20,11 +17,6 @@ class Server {
 
   async configureServer() {
     this.server = express();
-
-    // Ajustando o caminho para o diretório uploads corretamente
-    const uploadsPath = path.resolve(__dirname, "..", "uploads");
-    console.log(`Serving static files from: ${uploadsPath}`);
-    this.server.use("/uploads", express.static(uploadsPath));
 
     this.server.use(express.urlencoded({ extended: true }));
     this.server.use(express.json({ limit: "1mb" }));
