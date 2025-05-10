@@ -40,10 +40,11 @@ export default class OrderProcess {
     }
 
     // busca todos os funcionários relacionados ao pedido
+    const employeeIds = order.SalOrderItem.map((item) => Number(item.salEmployeeId)).filter((id) => !isNaN(id));
     const employees = await prisma.$queryRaw<Employee[]>`
       SELECT *
       FROM salesportal."SalEmployee"
-      WHERE id IN (${order.SalOrderItem.map((item) => item.salEmployeeId).join(",")});
+      WHERE id = ANY(ARRAY[${employeeIds.join(",")}]::INTEGER[]);
     `;
 
     if (!employees || employees.length === 0) {
