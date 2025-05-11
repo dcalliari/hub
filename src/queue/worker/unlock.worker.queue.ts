@@ -30,7 +30,7 @@ export class UnlockWorker {
       const unlock: Unlock = JSON.parse(msg.content.toString());
       console.log(`Processing card unlock ${unlock.id}...`);
 
-      await this.process(unlock);
+      await this.process(unlock, this.channel);
 
       // Confirm successful processing
       this.channel.ack(msg);
@@ -58,10 +58,10 @@ export class UnlockWorker {
     }
   }
 
-  public async process(unlock: Unlock): Promise<void> {
+  public async process(unlock: Unlock, channel: Channel): Promise<void> {
     try {
       const processor = new UnlockProcess();
-      return await processor.process(unlock);
+      return await processor.process(unlock, channel);
     } catch (error) {
       console.error(new Date(), `Error processing card unlock ${unlock.id}:`, error);
       throw error;
