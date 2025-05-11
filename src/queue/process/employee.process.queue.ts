@@ -6,13 +6,16 @@ import { RegisterService } from "../../services/register.service";
 export default class EmployeeProcess {
   private registerService = new RegisterService();
   private buyerService = new BuyerService();
-  async process(employee: Employee, channel: Channel) {
+  
+  async process(employees: Employee[], channel: Channel) {
     console.log("Starting employee processing...");
+
+    const companyDocument = employees[0].companyDocument;
 
     // verifica se a empresa já existe na billing
     try {
       await this.buyerService.buyerFetch({
-        documentoComprador: employee.companyDocument,
+        documentoComprador: companyDocument,
       });
     } catch (error) {
       // se não existir, envia a empresa para a fila company-new
@@ -21,7 +24,7 @@ export default class EmployeeProcess {
       FROM salesportal."SalCompany" sc
       LEFT JOIN "security"."SecUser" su
       ON sc.DOCUMENT = su."document"
-      WHERE sc.document = ${employee.companyDocument};
+      WHERE sc.document = ${companyDocument};
     `)[0];
 
       if (!company) {
@@ -32,27 +35,27 @@ export default class EmployeeProcess {
       console.log("Company not found in billing, sending to company-new queue");
     }
 
-    // registra o funcionário na billing
+    // registra os funcionários na billing
+    const colaboradores = employees.map((employee) => ({
+      cpf: employee.document || "",
+      nome: employee.name || "",
+      dataNascimento: employee.birthDate || "",
+      celular: employee.phone || "0000000000",
+      solicitarCartao: false,
+      enderecoEntrega: {
+        logradouro: employee.deliveryAddress.street || "",
+        numeroLogradouro: employee.deliveryAddress.number || "",
+        complementoLogradouro: employee.deliveryAddress.complement || "",
+        bairro: employee.deliveryAddress.district || "",
+        cidade: employee.deliveryAddress.city || "",
+        cep: (employee.deliveryAddress.zipCode || "").replace(/\D/g, ""),
+        uf: employee.deliveryAddress.state || "",
+      },
+    }));
+
     await this.registerService.registerBatch({
-      documentoComprador: employee.companyDocument,
-      colaboradores: [
-        {
-          cpf: employee.document || "",
-          nome: employee.name || "",
-          dataNascimento: employee.birthDate || "",
-          celular: employee.phone || "0000000000",
-          solicitarCartao: false,
-          enderecoEntrega: {
-            logradouro: employee.deliveryAddress.street || "",
-            numeroLogradouro: employee.deliveryAddress.number || "",
-            complementoLogradouro: employee.deliveryAddress.complement || "",
-            bairro: employee.deliveryAddress.district || "",
-            cidade: employee.deliveryAddress.city || "",
-            cep: (employee.deliveryAddress.zipCode || "").replace(/\D/g, ""),
-            uf: employee.deliveryAddress.state || "",
-          },
-        },
-      ]
+      documentoComprador: companyDocument,
+      colaboradores,
     });
   }
 }

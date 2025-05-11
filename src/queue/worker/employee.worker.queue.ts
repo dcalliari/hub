@@ -27,14 +27,14 @@ export class EmployeeWorker {
     if (!msg || !this.channel) return;
 
     try {
-      const employee: Employee = JSON.parse(msg.content.toString());
-      console.log(`Processing employee ${employee.id}...`);
+      const employees: Employee[] = JSON.parse(msg.content.toString());
+      console.log(`Processing employee from company ${employees[0].companyDocument}...`);
 
-      await this.process(employee, this.channel);
+      await this.process(employees, this.channel);
 
       // Confirm successful processing
       this.channel.ack(msg);
-      console.log(`Employee ${employee.id} processing finished.`);
+      console.log(`Employee from company ${employees[0].companyDocument} processing finished.`);
     } catch (error) {
       console.error(`Job failed with error:`, error);
 
@@ -58,12 +58,12 @@ export class EmployeeWorker {
     }
   }
 
-  public async process(employee: Employee, channel: Channel): Promise<void> {
+  public async process(employees: Employee[], channel: Channel): Promise<void> {
     try {
       const processor = new EmployeeProcess();
-      await processor.process(employee, channel);
+      await processor.process(employees, channel);
     } catch (error) {
-      console.error(new Date(), `Error processing employee ${employee.id}:`, error);
+      console.error(new Date(), `Error processing employees from company ${employees[0].companyDocument}:`, error);
       throw error;
     }
   }
