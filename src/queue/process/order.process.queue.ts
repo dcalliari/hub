@@ -129,6 +129,8 @@ export default class OrderProcess {
       };
     });
 
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+
     const userRecharge = await this.userService.userRecharge({
       documentoComprador: company.document,
       numeroPedidoTicketeira: order.id.toString(),
