@@ -16,7 +16,7 @@ export default class StatusProcess {
       FROM salesportal."SalEmployee" se
       LEFT JOIN salesportal."SalCompany" sc
       ON se."salCompanyId" = sc.id
-      WHERE se.id = ANY(ARRAY[${unlock.employees.join(",")}]::INTEGER[]);
+      WHERE se.id = ANY(ARRAY[${unlock.employees}]::INTEGER[]);
     `)
 
     // busca a empresa
