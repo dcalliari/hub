@@ -8,8 +8,16 @@ export default class StatusProcess {
   async process(unlock: Unlock): Promise<void> {
     console.log("Starting card unlock processing...");
 
-    // busca o pedido na billing
-    const cardUnlock = await this.cardService.cardUnlock({documentoComprador: unlock.document, cpfs: unlock.cpfs});
+    const employees = (await prisma.$queryRaw<any[]>`
+      SELECT sc.document as "companyDocument", se.document as cpf
+      FROM salesportal."SalEmployee" se
+      LEFT JOIN salesportal."SalCompany" sc
+      ON se."salCompanyId" = sc.id
+      WHERE se.id = ANY(ARRAY[${unlock.employees.join(",")}]::INTEGER[]);
+    `)
+
+    // solicita o desbloqueio dos cartões
+    const cardUnlock = await this.cardService.cardUnlock({documentoComprador: employees[0].companyDocument, cpfs: employees.map((employee) => employee.cpf)});
 
     // TODO: fazer
   }
