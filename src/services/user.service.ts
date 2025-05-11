@@ -26,7 +26,7 @@ export class UserService {
       console.log("Resposta da API usuario/recarga:", response.data);
       return response.data;
     } catch (error: any) {
-      console.error("Erro ao realizar recarga:", error.response?.data || error.message);
+      throw new Error(`Erro ao realizar recarga: ${error.response?.data || error.message}`);
     }
   }
 
@@ -47,7 +47,7 @@ export class UserService {
       console.log("Resposta da API usuario/recarga/consulta:", response.data);
       return response.data;
     } catch (error: any) {
-      console.error("Erro ao consultar recarga:", error.response?.data || error.message);
+      throw new Error(`Erro ao consultar recarga: ${error.response?.data || error.message}`);
     }
   }
 

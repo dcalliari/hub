@@ -66,7 +66,7 @@ export class RegisterService {
       return response.data;
     }
     catch (error: any) {
-      console.error("Erro ao consultar cadastro:", error.response?.data || error.message);
+      throw new Error(`Erro ao consultar cadastro: ${error.response?.data || error.message}`);
     }
   }
 }
