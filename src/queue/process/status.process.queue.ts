@@ -6,9 +6,9 @@ export default class StatusProcess {
 
   async process(status: Status): Promise<boolean> {
     console.log("Starting status processing...");
-
+    const uuid: string = status.uuid;
     // busca o pedido na billing
-    const currentStatus = await this.userService.userRechargeFetch({ uuid: status.paymentTransferCode });
+    const currentStatus = await this.userService.userRechargeFetch({ uuid });
 
     if (!currentStatus) {
       throw new Error("Status not found");
@@ -22,16 +22,16 @@ export default class StatusProcess {
 
     // atualiza o status do pedido caso o status seja 2 (concluído)
     if (currentStatus.statusPedido === 2) {
-      console.log("Status concluded");
       await prisma.$executeRaw`
-        UPDATE sal_order
+        UPDATE salesportal."SalOrder"
         SET 
-          is_released = true,
-          release_date = ${new Date()},
-          payment_transfer_code = ${currentStatus.uid},
-          blame_user = 'carioca_hub'
+          "isReleased" = true,
+          "releaseDate" = ${new Date()},
+          "paymentTransferCode" = ${currentStatus.uuid},
+          "blameUser" = 'carioca_hub'
         WHERE id = ${status.id};
       `;
+      console.log("Status concluded");
 
       return false;
     }

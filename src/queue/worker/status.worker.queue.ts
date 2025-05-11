@@ -27,8 +27,8 @@ export class StatusWorker {
     if (!msg || !this.channel) return;
 
     try {
-      const status = JSON.parse(msg.content.toString());
-      console.log(`Processing order status ${status.id}...`);
+      const status: Status = JSON.parse(msg.content.toString());
+      console.log(`Processing order status ${status.uuid}...`);
 
       const currentStatus = await this.process(status);
 
@@ -45,7 +45,7 @@ export class StatusWorker {
 
       // Confirm successful processing
       this.channel.ack(msg);
-      console.log(`Status ${status.id} processing finished.`);
+      console.log(`Status ${status.uuid} processing finished.`);
     } catch (error) {
       console.error(`Job failed with error:`, error);
 
@@ -74,7 +74,7 @@ export class StatusWorker {
       const processor = new StatusProcess();
       return await processor.process(status);
     } catch (error) {
-      console.error(new Date(), `Error processing status ${status.id}:`, error);
+      console.error(new Date(), `Error processing status ${status.uuid}:`, error);
       throw error;
     }
   }

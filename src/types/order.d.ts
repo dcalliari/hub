@@ -8,8 +8,3 @@ interface OrderItem {
   salEmployeeId: number;
   value: number;
 }
-
-interface Status {
-  id: number;
-  paymentTransferCode: string;
-}
