@@ -31,7 +31,7 @@ export default class EmployeeProcess {
         throw new Error("Company not found");
       }
 
-      await channel.sendToQueue("company-new", Buffer.from(JSON.stringify(company)), { headers: { "x-delay": 5000 } });
+      await channel.publish("delay", "company-new", Buffer.from(JSON.stringify(company)), { headers: { "x-delay": 5000 } });
       console.log("Company not found in billing, sending to company-new queue");
     }
 

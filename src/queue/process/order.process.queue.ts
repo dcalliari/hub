@@ -35,7 +35,7 @@ export default class OrderProcess {
 
     } catch (error) {
       // se não existir, envia a empresa para a fila company-new
-      await channel.sendToQueue("company-new", Buffer.from(JSON.stringify(company)), { headers: { "x-delay": 5000 } });
+      channel.publish("delay", "company-new", Buffer.from(JSON.stringify(company)), { headers: { "x-delay": 5000 } });
       console.log("Company not found in billing, sending to company-new queue");
     }
 
@@ -136,7 +136,7 @@ export default class OrderProcess {
     });
 
     // Envia o UUID da recarga para a fila "status-new"
-    await channel.sendToQueue("status-new", Buffer.from(JSON.stringify({ uuid: userRecharge.uuid })));
+    channel.publish("delay","status-new", Buffer.from(JSON.stringify({ id: order.id, uuid: userRecharge.uuid })), { headers: { "x-delay": 30000 } });
 
     await prisma.$executeRaw`
       UPDATE salesportal."SalOrder"

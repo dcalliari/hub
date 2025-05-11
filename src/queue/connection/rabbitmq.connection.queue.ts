@@ -77,7 +77,11 @@ export class RabbitMQConnection {
     
     if (!this.channels.has(queueName) && this.connection) {
       const channel = await this.connection.createChannel();
+
+      channel.assertExchange("delay", "x-delayed-message", { durable: true, arguments: { "x-delayed-type": "direct" } });
+
       await channel.assertQueue(queueName, options);
+      await channel.bindQueue(queueName, "delay", queueName);
       this.channels.set(queueName, channel);
     }
     

@@ -33,8 +33,13 @@ export class StatusWorker {
       const currentStatus = await this.process(status);
 
       if (currentStatus) {
-        console.log(`Status ${status.id} is still in progress.`);
-        this.channel.nack(msg, false, true); // Requeue the message
+        console.log(`Status ${status.uuid} is still in progress.`);
+        this.channel.nack(msg, false, false);
+
+        // Requeue the message with a delay
+        this.channel.publish('delay', this.queueName, msg.content, {
+          headers: { "x-delay": 30000 },
+        });
         return;
       }
 
@@ -57,8 +62,8 @@ export class StatusWorker {
       } else {
         console.error(`Retrying message...`);
         this.channel.nack(msg, false, false);
-        this.channel.sendToQueue(this.queueName, msg.content, {
-          headers: { 'x-attempts': attempts + 1 },
+        this.channel.publish("delay", this.queueName, msg.content, {
+          headers: { 'x-attempts': attempts + 1, "x-delay": 5000 },
         });
       }
     }

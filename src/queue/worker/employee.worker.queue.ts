@@ -51,8 +51,8 @@ export class EmployeeWorker {
       } else {
         console.error(`Retrying message...`);
         this.channel.nack(msg, false, false);
-        this.channel.sendToQueue(this.queueName, msg.content, {
-          headers: { 'x-attempts': attempts + 1 },
+        this.channel.publish("delay", this.queueName, msg.content, {
+          headers: { 'x-attempts': attempts + 1, "x-delay": 5000 },
         });
       }
     }
