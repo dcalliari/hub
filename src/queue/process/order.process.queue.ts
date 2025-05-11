@@ -63,7 +63,9 @@ export default class OrderProcess {
       };
 
       // formata birthDate
-      employee.birthDate = employee.birthDate ? employee.birthDate.split("T")[0] : null;
+      employee.birthDate = employee.birthDate
+        ? new Date(employee.birthDate).toISOString().split("T")[0]
+        : null;
 
       // remove os campos desnecessários
       delete employee["deliveryAddress.street"];
