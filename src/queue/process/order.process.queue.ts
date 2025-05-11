@@ -97,9 +97,28 @@ export default class OrderProcess {
 
     // se não existir, cria funcionário
     if (employeesToCreate.length > 0) {
-      // se for necessário criar funcionário, envia para a fila employee-new
-      await channel.sendToQueue("employee-new", Buffer.from(JSON.stringify(employeesToCreate)), { headers: { "x-delay": 5000 } });
-      console.log("Employee not found in billing, sending to employee-new queue");
+      // cria os funcionários na billing
+      const colaboradores = employeesToCreate.map((employee) => ({
+        cpf: employee.document || "",
+        nome: employee.name || "",
+        dataNascimento: employee.birthDate || "",
+        celular: (employee.phone || "0000000000").replace(/\D/g, ""),
+        solicitarCartao: true,
+        enderecoEntrega: {
+          logradouro: employee.deliveryAddress.street || "",
+          numeroLogradouro: employee.deliveryAddress.number || "",
+          complementoLogradouro: employee.deliveryAddress.complement || "",
+          bairro: employee.deliveryAddress.district || "",
+          cidade: employee.deliveryAddress.city || "",
+          cep: (employee.deliveryAddress.zipCode || "").replace(/\D/g, ""),
+          uf: employee.deliveryAddress.state || "",
+        },
+      }));
+
+      await this.registerService.registerBatch({
+        documentoComprador: company.document,
+        colaboradores,
+      });
     }
 
     const recargas = order.SalOrderItem.map((item) => {
