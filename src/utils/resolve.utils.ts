@@ -2,13 +2,13 @@
 
 type Resolve<T> =
   | {
-      success: true;
-      data: T;
-    }
+    success: true;
+    data: T;
+  }
   | {
-      success: false;
-      error: unknown;
-    };
+    success: false;
+    error: unknown;
+  };
 
 export function resolve<T>(promise: Promise<T>): Promise<Resolve<T>>;
 export function resolve<T>(func: () => T): Resolve<T>;

@@ -13,16 +13,16 @@ export class OrderWorker {
 
   public async initialize(channel: Channel): Promise<void> {
     this.channel = channel;
-    
+
     // Setup prefetch to avoid overloading the worker
     await this.channel.prefetch(this.prefetchCount);
-    
+
     // Consume messages from the queue
     await this.channel.consume(this.queueName, this.handleMessage.bind(this));
-    
+
     console.log(`Worker initialized for queue: ${this.queueName}`);
   }
-  
+
   private async handleMessage(msg: ConsumeMessage | null): Promise<void> {
     if (!msg || !this.channel) return;
 

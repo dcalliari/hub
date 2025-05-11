@@ -78,7 +78,7 @@ export default class OrderProcess {
 
       return { ...employee, deliveryAddress };
     }) as Employee[];
-    
+
     if (!employees || employees.length === 0) {
       throw new Error("Employees not found");
     }
@@ -138,7 +138,7 @@ export default class OrderProcess {
     });
 
     // Envia o UUID da recarga para a fila "status-new"
-    channel.publish("delay","status-new", Buffer.from(JSON.stringify({ id: order.id, uuid: userRecharge.uuid })), { headers: { "x-delay": 30000 } });
+    channel.publish("delay", "status-new", Buffer.from(JSON.stringify({ id: order.id, uuid: userRecharge.uuid })), { headers: { "x-delay": 30000 } });
 
     await prisma.$executeRaw`
       UPDATE salesportal."SalOrder"

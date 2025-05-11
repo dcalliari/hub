@@ -27,11 +27,11 @@ export class WorkerRegistry {
 
   private registerDefaultWorkers(): void {
     this.registerWorker(new CompanyWorker('company-new'));
-    
+
     this.registerWorker(new EmployeeWorker('employee-new'));
 
     this.registerWorker(new OrderWorker('order-new'));
-    
+
     this.registerWorker(new StatusWorker('status-new'));
   }
 

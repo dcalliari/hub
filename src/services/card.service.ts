@@ -51,24 +51,24 @@ export class CardService {
     }
   }
 
-    public async cardUnlock(payload: CardUnlockPayload): Promise<any> {
-      const authToken = await this.auth.ensureAuthenticated();
-      if (!authToken) {
-        console.error("Falha na autenticação. Não é possível desbloquear cartões.");
-        return;
-      }
-  
-      const parsed = cardUnlockPayloadSchema.safeParse(payload);
-      if (!parsed.success) {
-        throw new Error(`Payload de desbloqueio de cartões inválido: ${JSON.stringify(parsed.error.format())}`);
-      }
-  
-      try {
-        const response = await cartaoDesbloaquear(payload, authToken);
-        console.log("Resposta da API desbloquear/midias:", response.data);
-        return response.data;
-      } catch (error: any) {
-        console.error("Erro ao desbloquear cartões:", error.response?.data || error.message);
-      }
+  public async cardUnlock(payload: CardUnlockPayload): Promise<any> {
+    const authToken = await this.auth.ensureAuthenticated();
+    if (!authToken) {
+      console.error("Falha na autenticação. Não é possível desbloquear cartões.");
+      return;
     }
+
+    const parsed = cardUnlockPayloadSchema.safeParse(payload);
+    if (!parsed.success) {
+      throw new Error(`Payload de desbloqueio de cartões inválido: ${JSON.stringify(parsed.error.format())}`);
+    }
+
+    try {
+      const response = await cartaoDesbloaquear(payload, authToken);
+      console.log("Resposta da API desbloquear/midias:", response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error("Erro ao desbloquear cartões:", error.response?.data || error.message);
+    }
+  }
 }

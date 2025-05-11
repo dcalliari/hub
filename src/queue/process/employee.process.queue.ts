@@ -6,7 +6,7 @@ import { RegisterService } from "../../services/register.service";
 export default class EmployeeProcess {
   private registerService = new RegisterService();
   private buyerService = new BuyerService();
-  
+
   async process(employees: Employee[], channel: Channel) {
     console.log("Starting employee processing...");
 

@@ -49,7 +49,7 @@ export class RegisterService {
       console.error("Erro ao consultar lote:", error.response?.data || error.message);
     }
   }
-  
+
   public async registerFetch(payload: RegisterFetchPayload): Promise<any> {
     const authToken = await this.auth.ensureAuthenticated();
     if (!authToken) {
