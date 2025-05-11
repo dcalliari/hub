@@ -62,6 +62,9 @@ export default class OrderProcess {
         state: employee["deliveryAddress.state"],
       };
 
+      // formata birthDate
+      employee.birthDate = employee.birthDate ? employee.birthDate.split("T")[0] : null;
+
       // remove os campos desnecessários
       delete employee["deliveryAddress.street"];
       delete employee["deliveryAddress.number"];
