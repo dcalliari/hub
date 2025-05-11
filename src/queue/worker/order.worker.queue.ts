@@ -28,7 +28,7 @@ export class OrderWorker {
 
     try {
       const order: Order = JSON.parse(msg.content.toString());
-      console.log(`Processing order order ${order.id}...`);
+      console.log(`Processing order ${order.id}...`);
 
       await this.process(order, this.channel);
 
