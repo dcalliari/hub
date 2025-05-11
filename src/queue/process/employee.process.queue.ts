@@ -40,8 +40,8 @@ export default class EmployeeProcess {
       cpf: employee.document || "",
       nome: employee.name || "",
       dataNascimento: employee.birthDate || "",
-      celular: employee.phone || "0000000000",
-      solicitarCartao: false,
+      celular: (employee.phone || "0000000000").replace(/\D/g, ""),
+      solicitarCartao: true,
       enderecoEntrega: {
         logradouro: employee.deliveryAddress.street || "",
         numeroLogradouro: employee.deliveryAddress.number || "",
