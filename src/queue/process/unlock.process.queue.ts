@@ -17,7 +17,7 @@ export default class StatusProcess {
     `)
 
     // solicita o desbloqueio dos cartões
-    const cardUnlock = await this.cardService.cardUnlock({documentoComprador: employees[0].companyDocument, cpfs: employees.map((employee) => employee.cpf)});
+    await this.cardService.cardUnlock({documentoComprador: employees[0].companyDocument, cpfs: employees.map((employee) => employee.cpf)});
 
     // TODO: fazer
   }

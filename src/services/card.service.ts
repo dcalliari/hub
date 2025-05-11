@@ -68,7 +68,7 @@ export class CardService {
       console.log("Resposta da API desbloquear/midias:", response.data);
       return response.data;
     } catch (error: any) {
-      console.error("Erro ao desbloquear cartões:", error.response?.data || error.message);
+      throw new Error(`Erro ao desbloquear cartões: ${error.response?.data || error.message}`);
     }
   }
 }
