@@ -3,6 +3,7 @@ import { CompanyWorker } from "../worker/company.worker.queue";
 import { EmployeeWorker } from "../worker/employee.worker.queue";
 import { OrderWorker } from "../worker/order.worker.queue";
 import { StatusWorker } from "../worker/status.worker.queue";
+import { UnlockWorker } from "../worker/unlock.worker.queue";
 
 interface Worker {
   queueName: string;
@@ -33,6 +34,8 @@ export class WorkerRegistry {
     this.registerWorker(new OrderWorker('order-new'));
 
     this.registerWorker(new StatusWorker('status-new'));
+
+    this.registerWorker(new UnlockWorker('unlock-new'));
   }
 
   public registerWorker(worker: Worker): void {
