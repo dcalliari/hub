@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsnd -r dotenv/config --respawn --transpile-only src/app.ts dotenv_config_path=.env",
+    "dev": "tsnd -r dotenv/config --respawn --transpile-only src/app.ts dotenv_config_path=.env.dev",
     "build": "yarn tsc",
     "cli:create-env": "ts-node src/scripts/create-env.ts"
   },
