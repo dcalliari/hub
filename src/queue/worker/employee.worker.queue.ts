@@ -30,7 +30,7 @@ export class EmployeeWorker {
       const employees: Employee[] = JSON.parse(msg.content.toString());
       console.log(`Processing employee from company ${employees[0].companyDocument}...`);
 
-      await this.process(employees, this.channel);
+      await this.process(employees);
 
       // Confirm successful processing
       this.channel.ack(msg);
@@ -58,10 +58,10 @@ export class EmployeeWorker {
     }
   }
 
-  public async process(employees: Employee[], channel: Channel): Promise<void> {
+  public async process(employees: Employee[]): Promise<void> {
     try {
       const processor = new EmployeeProcess();
-      await processor.process(employees, channel);
+      await processor.process(employees);
     } catch (error) {
       console.error(new Date(), `Error processing employees from company ${employees[0].companyDocument}:`, error);
       throw error;

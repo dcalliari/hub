@@ -1,4 +1,3 @@
-import { Channel } from "amqplib";
 import { prisma } from "../../database/prisma.database";
 import { CardService } from "../../services/card.service";
 import { BuyerService } from "../../services/buyer.service";
@@ -10,7 +9,7 @@ export default class StatusProcess {
   private cardService = new CardService();
   private buyerService = new BuyerService();
 
-  async process(unlock: Unlock, channel: Channel): Promise<void> {
+  async process(unlock: Unlock): Promise<void> {
     console.log("Starting card unlock processing...");
 
     const employees = (await prisma.$queryRaw<any[]>`

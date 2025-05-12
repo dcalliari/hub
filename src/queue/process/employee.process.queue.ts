@@ -1,4 +1,3 @@
-import { Channel } from "amqplib";
 import { prisma } from "../../database/prisma.database";
 import { BuyerService } from "../../services/buyer.service";
 import { RegisterService } from "../../services/register.service";
@@ -10,7 +9,7 @@ export default class EmployeeProcess {
   private registerService = new RegisterService();
   private buyerService = new BuyerService();
 
-  async process(employees: Employee[], channel: Channel) {
+  async process(employees: Employee[]) {
     console.log("Starting employee processing...");
 
     const companyDocument = employees[0].companyDocument;
