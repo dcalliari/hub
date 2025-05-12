@@ -2,9 +2,11 @@ import { Channel } from "amqplib";
 import { prisma } from "../../database/prisma.database";
 import { CardService } from "../../services/card.service";
 import { BuyerService } from "../../services/buyer.service";
+import CompanyProcess from "./company.process.queue";
 
 
 export default class StatusProcess {
+  private companyProcess = new CompanyProcess();
   private cardService = new CardService();
   private buyerService = new BuyerService();
 
@@ -39,9 +41,9 @@ export default class StatusProcess {
       });
 
     } catch (error) {
-      // se não existir, envia a empresa para a fila company-new
-      channel.publish("delay", "company-new", Buffer.from(JSON.stringify(company)), { headers: { "x-delay": 5000 } });
-      console.log("Company not found in billing, sending to company-new queue");
+      // se não existir, cria a empresa na billing
+      await this.companyProcess.process(company);
+      console.log("Company not found in billing, creating...");
     }
 
     // solicita o desbloqueio dos cartões

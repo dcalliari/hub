@@ -2,8 +2,11 @@ import { Channel } from "amqplib";
 import { prisma } from "../../database/prisma.database";
 import { BuyerService } from "../../services/buyer.service";
 import { RegisterService } from "../../services/register.service";
+import CompanyProcess from "./company.process.queue";
 
 export default class EmployeeProcess {
+
+  private companyProcess = new CompanyProcess()
   private registerService = new RegisterService();
   private buyerService = new BuyerService();
 
@@ -31,8 +34,9 @@ export default class EmployeeProcess {
         throw new Error("Company not found");
       }
 
-      await channel.publish("delay", "company-new", Buffer.from(JSON.stringify(company)), { headers: { "x-delay": 5000 } });
-      console.log("Company not found in billing, sending to company-new queue");
+      // se não existir, cria a empresa na billing
+      await this.companyProcess.process(company);
+      console.log("Company not found in billing, creating...");
     }
 
     // registra os funcionários na billing

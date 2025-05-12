@@ -3,8 +3,10 @@ import { prisma } from "../../database/prisma.database";
 import { BuyerService } from "../../services/buyer.service";
 import { RegisterService } from "../../services/register.service";
 import { UserService } from "../../services/user.service";
+import CompanyProcess from "./company.process.queue";
 
 export default class OrderProcess {
+  private companyProcess = new CompanyProcess();
   private buyerService = new BuyerService();
 
   private registerService = new RegisterService();
@@ -34,9 +36,9 @@ export default class OrderProcess {
       });
 
     } catch (error) {
-      // se não existir, envia a empresa para a fila company-new
-      channel.publish("delay", "company-new", Buffer.from(JSON.stringify(company)), { headers: { "x-delay": 5000 } });
-      console.log("Company not found in billing, sending to company-new queue");
+      // se não existir, cria a empresa na billing
+      await this.companyProcess.process(company);
+      console.log("Company not found in billing, creating...");
     }
 
     // busca todos os funcionários relacionados ao pedido
