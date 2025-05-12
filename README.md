@@ -31,7 +31,7 @@ yarn prisma generate
 5. **Subir o RabbitMQ**
 
 ```bash
-docker-compose up -d
+sudo docker-compose up -d
 ```
 
 6. **Iniciar o Projeto**
