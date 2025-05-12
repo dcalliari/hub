@@ -26,11 +26,27 @@ export default class StatusProcess {
         UPDATE salesportal."SalOrder"
         SET 
           "isReleased" = true,
-          "releaseDate" = ${new Date()},
+          "releaseDate" = NOW(),
           "paymentTransferCode" = ${currentStatus.uuid},
           "blameUser" = 'carioca_hub'
         WHERE id = ${status.id};
       `;
+
+      const [{ externalId }] = await prisma.$queryRaw<Array<{ externalId: number }>>`
+        SELECT "externalId"
+        FROM salesportal."SalOrder"
+        WHERE id = ${status.id};
+      `;
+
+      await prisma.$queryRaw`
+        UPDATE commerce."ComRechargeOrder"
+        SET "isReleased" = TRUE,
+            "releaseObservation" = 'Processado pelo Carioca Hub',
+            "releaseDate" = NOW(),
+            "releaseUser" = 'Processamento Carioca Hub',
+            "comRechargeOrderReleaseReasonId" = 1
+        WHERE id = ${externalId}::int;`;
+
       console.log("Status concluded");
 
       return false;
