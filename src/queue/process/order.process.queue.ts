@@ -131,7 +131,7 @@ export default class OrderProcess {
       };
     });
 
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await new Promise((resolve) => setTimeout(resolve, 5000)); // precisa aguardar alguns segundos para a billing processar os cadastros
 
     const userRecharge = await this.userService.userRecharge({
       documentoComprador: company.document,
