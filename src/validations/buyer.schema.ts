@@ -6,7 +6,7 @@ export const buyerRegisterPayloadSchema = z.object({
   nome: z.string().min(3, "Nome deve ter pelo menos 3 caracteres"),
   nomeFantasia: z.string().min(3, "Nome fantasia deve ter pelo menos 3 caracteres"),
   email: z.string().email("Email inválido"),
-  telefone: z.string().min(10, "Telefone deve ter pelo menos 10 números").regex(/^\d+$/, "Telefone deve conter apenas números"),
+  telefone: z.string().optional(),
 });
 
 export const buyerFetchPayloadSchema = z.object({

@@ -4,5 +4,5 @@ interface Company {
   name: string
   description?: string
   email: string // secuser
-  phone: string
+  phone?: string
 }
