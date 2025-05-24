@@ -42,7 +42,7 @@ export default class EmployeeProcess {
     const colaboradores = employees.map((employee) => ({
       cpf: employee.document || "",
       nome: employee.name || "",
-      dataNascimento: employee.birthDate || "",
+      dataNascimento: employee.birthDate.split('T')[0] || "",
       celular: (employee.phone || "0000000000").replace(/\D/g, ""),
       solicitarCartao: true,
       enderecoEntrega: {
