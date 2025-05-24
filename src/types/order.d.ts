@@ -4,7 +4,7 @@ interface Order {
   SalOrderItem: OrderItem[];
 }
 
-interface OrderItem {
+type OrderItem = {
   salEmployeeId: number;
   value: number;
 }
