@@ -42,9 +42,9 @@ type EnderecoEntrega = {
  */
 type Colaborador = {
   cpf: string;
-  nome: string;
-  dataNascimento: string;
-  celular: string;
+  nome?: string;
+  dataNascimento?: string;
+  celular?: string;
   solicitarCartao: boolean;
   enderecoEntrega?: EnderecoEntrega;
 };

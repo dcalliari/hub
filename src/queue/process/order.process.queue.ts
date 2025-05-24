@@ -97,6 +97,11 @@ export default class OrderProcess {
       return fetchStatus?.status === 3;
     });
 
+    const employeesToCardRequest = employees.filter((employee) => {
+      const fetchStatus = employeeFetch.cpfs.find((cpfs: any) => cpfs.cpf === employee.document);
+      return fetchStatus?.status === 1;
+    });
+
     // se não existir, cria funcionário
     if (employeesToCreate.length > 0) {
       // cria os funcionários na billing
@@ -115,6 +120,19 @@ export default class OrderProcess {
           cep: (employee.deliveryAddress.zipCode || "").replace(/\D/g, ""),
           uf: employee.deliveryAddress.state || "",
         },
+      }));
+
+      await this.registerService.registerBatch({
+        documentoComprador: company.document,
+        colaboradores,
+      });
+    }
+
+    if (employeesToCardRequest.length > 0) {
+      // atualiza os funcionários na billing
+      const colaboradores = employeesToCreate.map((employee) => ({
+        cpf: employee.document || "",
+        solicitarCartao: true,
       }));
 
       await this.registerService.registerBatch({
