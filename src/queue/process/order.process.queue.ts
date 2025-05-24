@@ -98,6 +98,7 @@ export default class OrderProcess {
       return fetchStatus?.status === 3;
     });
 
+    // filtra os funcionários que precisam de solicitação de cartão (status 1)
     const employeesToCardRequest = employees.filter((employee) => {
       const fetchStatus = employeeFetch.cpfs.find((cpfs: any) => cpfs.cpf === employee.document);
       return fetchStatus?.status === 1;
@@ -129,11 +130,24 @@ export default class OrderProcess {
       });
     }
 
+    // solicita cartão para os funcionários que precisam
     if (employeesToCardRequest.length > 0) {
       // atualiza os funcionários na billing
       const colaboradores = employeesToCardRequest.map((employee) => ({
         cpf: employee.document || "",
+        nome: employee.name || "",
+        dataNascimento: employee.birthDate || "",
+        celular: (employee.phone || "0000000000").replace(/\D/g, ""),
         solicitarCartao: true,
+        enderecoEntrega: {
+          logradouro: employee.deliveryAddress.street || "",
+          numeroLogradouro: employee.deliveryAddress.number || "",
+          complementoLogradouro: employee.deliveryAddress.complement || "",
+          bairro: employee.deliveryAddress.district || "",
+          cidade: employee.deliveryAddress.city || "",
+          cep: (employee.deliveryAddress.zipCode || "").replace(/\D/g, ""),
+          uf: employee.deliveryAddress.state || "",
+        },
       }));
 
       await this.registerService.registerBatch({
