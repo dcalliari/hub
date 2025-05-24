@@ -131,7 +131,7 @@ export default class OrderProcess {
 
     if (employeesToCardRequest.length > 0) {
       // atualiza os funcionários na billing
-      const colaboradores = employeesToCreate.map((employee) => ({
+      const colaboradores = employeesToCardRequest.map((employee) => ({
         cpf: employee.document || "",
         solicitarCartao: true,
       }));
