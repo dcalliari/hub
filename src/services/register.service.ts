@@ -15,10 +15,10 @@ export class RegisterService {
       throw new Error("Falha na autenticação. Não é possível cadastrar o lote.");
     }
 
-    const parsed = registerBatchPayloadSchema.safeParse(payload);
-    if (!parsed.success) {
-      throw new Error(`Payload de cadastro de lote inválido: ${JSON.stringify(parsed.error.format())}`);
-    }
+    // const parsed = registerBatchPayloadSchema.safeParse(payload);
+    // if (!parsed.success) {
+    //   throw new Error(`Payload de cadastro de lote inválido: ${JSON.stringify(parsed.error.format())}`);
+    // }
 
     try {
       const response = await cadastroLote(payload, authToken);
@@ -36,10 +36,10 @@ export class RegisterService {
       return;
     }
 
-    const parsed = registerFetchBatchPayloadSchema.safeParse(payload);
-    if (!parsed.success) {
-      throw new Error(`Payload de consulta de lote inválido: ${JSON.stringify(parsed.error.format())}`);
-    }
+    // const parsed = registerFetchBatchPayloadSchema.safeParse(payload);
+    // if (!parsed.success) {
+    //   throw new Error(`Payload de consulta de lote inválido: ${JSON.stringify(parsed.error.format())}`);
+    // }
 
     try {
       const response = await cadastroLoteConsulta(payload, authToken);
@@ -56,10 +56,12 @@ export class RegisterService {
       console.error("Falha na autenticação. Não é possível consultar o cadastro.");
       return;
     }
-    const parsed = registerFetchPayloadSchema.safeParse(payload);
-    if (!parsed.success) {
-      throw new Error(`Payload de consulta de cadastro inválido: ${JSON.stringify(parsed.error.format())}`);
-    }
+
+    // const parsed = registerFetchPayloadSchema.safeParse(payload);
+    // if (!parsed.success) {
+    //   throw new Error(`Payload de consulta de cadastro inválido: ${JSON.stringify(parsed.error.format())}`);
+    // }
+
     try {
       const response = await cadastroConsulta(payload, authToken);
       console.log("Resposta da API cadastro/consulta:", response.data);

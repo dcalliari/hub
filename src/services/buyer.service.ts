@@ -15,10 +15,10 @@ export class BuyerService {
       throw new Error("Falha na autenticação. Não é possível cadastrar o comprador.");
     }
 
-    const parsed = buyerRegisterPayloadSchema.safeParse(payload);
-    if (!parsed.success) {
-      throw new Error(`Payload de cadastro de comprador inválido: ${JSON.stringify(parsed.error.format())}`);
-    }
+    // const parsed = buyerRegisterPayloadSchema.safeParse(payload);
+    // if (!parsed.success) {
+    //   throw new Error(`Payload de cadastro de comprador inválido: ${JSON.stringify(parsed.error.format())}`);
+    // }
 
     try {
       const response = await compradorCadastro(payload, authToken);
@@ -35,10 +35,10 @@ export class BuyerService {
       throw new Error("Falha na autenticação. Não é possível consultar o comprador.");
     }
 
-    const parsed = buyerFetchPayloadSchema.safeParse(payload);
-    if (!parsed.success) {
-      throw new Error(`Payload de consulta de comprador inválido: ${JSON.stringify(parsed.error.format())}`);
-    }
+    // const parsed = buyerFetchPayloadSchema.safeParse(payload);
+    // if (!parsed.success) {
+    //   throw new Error(`Payload de consulta de comprador inválido: ${JSON.stringify(parsed.error.format())}`);
+    // }
 
     try {
       const response = await compradorConsulta(payload, authToken);
