@@ -44,6 +44,10 @@ export class UnlockWorker {
 
       if (attempts >= maxAttempts) {
         console.error(`Max attempts reached. Rejecting message.`);
+        // Ensure dead letter queue exists
+        await this.channel.assertQueue('unlock-dead', { durable: true });
+
+        // Send to dead letter queue
         this.channel.sendToQueue('unlock-dead', msg.content, {
           headers: { 'x-attempts': attempts },
         });

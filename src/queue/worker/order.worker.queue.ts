@@ -44,6 +44,10 @@ export class OrderWorker {
 
       if (attempts >= maxAttempts) {
         console.error(`Max attempts reached. Rejecting message.`);
+        // Ensure dead letter queue exists
+        await this.channel.assertQueue('order-dead', { durable: true });
+
+        // Send to dead letter queue
         this.channel.sendToQueue('order-dead', msg.content, {
           headers: { 'x-attempts': attempts },
         });

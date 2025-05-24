@@ -44,6 +44,10 @@ export class CompanyWorker {
 
       if (attempts >= maxAttempts) {
         console.error(`Max attempts reached. Rejecting message.`);
+        // Ensure dead letter queue exists
+        await this.channel.assertQueue('company-dead', { durable: true });
+        
+        // Send to dead letter queue
         this.channel.sendToQueue('company-dead', msg.content, {
           headers: { 'x-attempts': attempts },
         });

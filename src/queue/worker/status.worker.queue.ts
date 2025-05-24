@@ -55,6 +55,10 @@ export class StatusWorker {
 
       if (attempts >= maxAttempts) {
         console.error(`Max attempts reached. Rejecting message.`);
+        // Ensure dead letter queue exists
+        await this.channel.assertQueue('status-dead', { durable: true });
+
+        // Send to dead letter queue
         this.channel.sendToQueue('status-dead', msg.content, {
           headers: { 'x-attempts': attempts },
         });
