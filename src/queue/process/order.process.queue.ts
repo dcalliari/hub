@@ -4,6 +4,7 @@ import { BuyerService } from "../../services/buyer.service";
 import { RegisterService } from "../../services/register.service";
 import { UserService } from "../../services/user.service";
 import CompanyProcess from "./company.process.queue";
+import { Prisma } from "@prisma/client";
 
 export default class OrderProcess {
   private companyProcess = new CompanyProcess();
@@ -52,7 +53,7 @@ export default class OrderProcess {
       FROM salesportal."SalEmployee" se
       LEFT JOIN salesportal."SalCompany" sc
       ON se."salCompanyId" = sc.id
-      WHERE se.id = ANY(ARRAY[${employeeIds.join(",")}]::INTEGER[]);
+      WHERE se.id IN (${Prisma.join(employeeIds)});
     `).map((employee) => {
       const deliveryAddress = {
         street: employee["deliveryAddress.street"],
