@@ -4,7 +4,7 @@ import { BuyerService } from "../../services/buyer.service";
 import CompanyProcess from "./company.process.queue";
 
 
-export default class StatusProcess {
+export default class UnlockProcess {
   private companyProcess = new CompanyProcess();
   private cardService = new CardService();
   private buyerService = new BuyerService();
