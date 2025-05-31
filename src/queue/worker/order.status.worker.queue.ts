@@ -1,7 +1,7 @@
 import { Channel, ConsumeMessage } from 'amqplib';
-import StatusProcess from '../process/status.process.queue';
+import OrderStatusProcess from '../process/order.status.process.queue';
 
-export class StatusWorker {
+export class OrderStatusWorker {
   public queueName: string;
   public prefetchCount: number;
   private channel: Channel | null = null;
@@ -27,13 +27,13 @@ export class StatusWorker {
     if (!msg || !this.channel) return;
 
     try {
-      const status: Status = JSON.parse(msg.content.toString());
-      console.log(`Processing order status ${status.uuid}...`);
+      const orderStatus: OrderStatus = JSON.parse(msg.content.toString());
+      console.log(`Processing order status ${orderStatus.uuid}...`);
 
-      const currentStatus = await this.process(status);
+      const currentStatus = await this.process(orderStatus);
 
       if (currentStatus) {
-        console.log(`Status ${status.uuid} is still in progress.`);
+        console.log(`Order status ${orderStatus.uuid} is still in progress.`);
         this.channel.nack(msg, false, false);
 
         // Requeue the message with a delay
@@ -45,7 +45,7 @@ export class StatusWorker {
 
       // Confirm successful processing
       this.channel.ack(msg);
-      console.log(`Status ${status.uuid} processing finished.`);
+      console.log(`Order status ${orderStatus.uuid} processing finished.`);
     } catch (error) {
       console.error(`Job failed with error:`, error);
 
@@ -56,10 +56,10 @@ export class StatusWorker {
       if (attempts >= maxAttempts) {
         console.error(`Max attempts reached. Rejecting message.`);
         // Ensure dead letter queue exists
-        await this.channel.assertQueue('status-dead', { durable: true });
+        await this.channel.assertQueue('order-status-dead', { durable: true });
 
         // Send to dead letter queue
-        this.channel.sendToQueue('status-dead', msg.content, {
+        this.channel.sendToQueue('order-status-dead', msg.content, {
           headers: { 'x-attempts': attempts },
         });
         this.channel.ack(msg);
@@ -73,12 +73,12 @@ export class StatusWorker {
     }
   }
 
-  public async process(status: Status): Promise<boolean> {
+  public async process(orderStatus: OrderStatus): Promise<boolean> {
     try {
-      const processor = new StatusProcess();
-      return await processor.process(status);
+      const processor = new OrderStatusProcess();
+      return await processor.process(orderStatus);
     } catch (error) {
-      console.error(new Date(), `Error processing status ${status.uuid}:`, error);
+      console.error(new Date(), `Error processing order status ${orderStatus.uuid}:`, error);
       throw error;
     }
   }

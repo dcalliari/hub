@@ -1,22 +1,22 @@
 import { prisma } from "../../database/prisma.database";
 import { UserService } from "../../services/user.service";
 
-export default class StatusProcess {
+export default class OrderStatusProcess {
   private userService = new UserService();
 
-  async process(status: Status): Promise<boolean> {
-    console.log("Starting status processing...");
-    const uuid: string = status.uuid;
+  async process(orderStatus: OrderStatus): Promise<boolean> {
+    console.log("Starting order status processing...");
+    const uuid: string = orderStatus.uuid;
     // busca o pedido na billing
     const currentStatus = await this.userService.userRechargeFetch({ uuid });
 
     if (!currentStatus) {
-      throw new Error("Status not found");
+      throw new Error("Order status not found");
     }
 
     // volta para a fila caso o status seja 1 (pendente)
     if (currentStatus.statusPedido === 1) {
-      console.log("Status in progress");
+      console.log("Order status in progress");
       return true;
     }
 
@@ -29,13 +29,13 @@ export default class StatusProcess {
           "releaseDate" = NOW(),
           "paymentTransferCode" = ${currentStatus.uuid},
           "blameUser" = 'carioca_hub'
-        WHERE id = ${status.id};
+        WHERE id = ${orderStatus.id};
       `;
 
       const [{ externalId }] = await prisma.$queryRaw<Array<{ externalId: number }>>`
         SELECT "externalId"
         FROM salesportal."SalOrder"
-        WHERE id = ${status.id};
+        WHERE id = ${orderStatus.id};
       `;
 
       await prisma.$queryRaw`
@@ -52,7 +52,7 @@ export default class StatusProcess {
       return false;
     }
 
-    throw new Error(`Something went wrong with the status processing: ${currentStatus}`);
+    throw new Error(`Something went wrong with the order status processing: ${currentStatus}`);
 
     // TODO: tratar outros status (3 - Processamento com Erro e 4 - Nenhum registro importado)
   }

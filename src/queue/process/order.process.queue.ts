@@ -172,8 +172,8 @@ export default class OrderProcess {
       recargas,
     });
 
-    // Envia o UUID da recarga para a fila "status-new"
-    channel.publish("delay", "status-new", Buffer.from(JSON.stringify({ id: order.id, uuid: userRecharge.uuid })), { headers: { "x-delay": 30000 } });
+    // Envia o UUID da recarga para a fila "order-status"
+    channel.publish("delay", "order-status", Buffer.from(JSON.stringify({ id: order.id, uuid: userRecharge.uuid })), { headers: { "x-delay": 30000 } });
 
     await prisma.$executeRaw`
       UPDATE salesportal."SalOrder"
