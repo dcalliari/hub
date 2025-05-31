@@ -5,7 +5,7 @@ import { OrderWorker } from "../worker/order.worker.queue";
 import { OrderStatusWorker } from "../worker/order.status.worker.queue";
 import { UnlockWorker } from "../worker/unlock.worker.queue";
 import { ReplacementWorker } from "../worker/replacement.worker.queue";
-import { ReplacementStatusWorker } from "../worker/replacement.status.worker.queue";
+import { ReplacementStatusWorker } from "./replacement.status.worker.queue";
 
 interface Worker {
   queueName: string;
