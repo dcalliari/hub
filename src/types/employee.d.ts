@@ -5,6 +5,7 @@ interface Employee {
   document: string
   birthDate: string
   phone: string
+  hasCard: boolean
   deliveryAddress: {
     street: string
     number: string

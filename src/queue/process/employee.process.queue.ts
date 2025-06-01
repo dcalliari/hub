@@ -44,7 +44,7 @@ export default class EmployeeProcess {
       nome: employee.name || "",
       dataNascimento: employee.birthDate.split('T')[0] || "",
       celular: (employee.phone || "0000000000").replace(/\D/g, ""),
-      solicitarCartao: false,
+      solicitarCartao: employee.hasCard || false,
       enderecoEntrega: {
         logradouro: employee.deliveryAddress.street || "",
         numeroLogradouro: employee.deliveryAddress.number || "",
