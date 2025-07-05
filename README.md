@@ -3,13 +3,13 @@
 1. **Clonar o Repositório**
 
 ```bash
-git clone git@github.com:Tecsomobi/carioca_hub.git
+git clone git@github.com:dcalliari/hub.git
 ```
 
 2. **Instalar Dependências**
 
 ```bash
-cd carioca_hub
+cd hub
 nvm use 20
 yarn
 ```
